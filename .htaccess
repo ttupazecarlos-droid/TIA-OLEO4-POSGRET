@@ -1,0 +1,42 @@
+# ============================================================
+# TIA OLEO 4 - Apache (produccion)
+# ============================================================
+Options -Indexes
+
+# Bloquea archivos sensibles servidos por error
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "^(database\.sql|README.*|Dockerfile|docker-compose\.yml|render\.yaml)$">
+  Require all denied
+</FilesMatch>
+
+<Files "config.php">
+  Require all denied
+</Files>
+
+<Files "supabase-storage.php">
+  Require all denied
+</Files>
+
+<FilesMatch "^(admin-auth|cliente-auth)\.php$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# Cache ligero para imagenes y estaticos
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 7 days"
+  ExpiresByType image/png "access plus 7 days"
+  ExpiresByType image/webp "access plus 7 days"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+</IfModule>

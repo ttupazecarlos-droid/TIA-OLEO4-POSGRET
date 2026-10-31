@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagar pedido (sandbox) — Tía Óleo 4</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/400.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+.pago-wrap{max-width:640px;margin:24px auto;padding:0 16px 60px}
+.pago-caja{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin:14px 0}
+.pago-caja label{display:block;margin:8px 0;font-size:.9rem}
+.pago-caja input,.pago-caja select{width:100%;padding:9px;margin-top:4px;border:1px solid #d1d5db;border-radius:6px;font-size:1rem;font-family:inherit}
+.pago-msg{min-height:1.4em} .pago-ok{color:#166534;font-weight:700} .pago-err{color:#991b1b;font-weight:700}
+.tarj-rapidas{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.tarj-rapidas button{background:#f3f4f6;border:1px solid #d1d5db;color:#1f2937;border-radius:14px;padding:4px 10px;font-size:.78rem;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="index.html">← Volver a la tienda Tía Óleo 4</a>
+  <span class="topbar-sep">|</span>
+  <a href="panel-control.html">Ver panel de control</a>
+</div>
+<header><div class="header-inner">
+  <div class="brand"><span class="brand-icon">✎</span><h1>Tia Óleo 4</h1></div>
+  <p class="tagline">Pago sandbox — Sesión 7 (sin dinero real)</p>
+</div></header>
+<main class="pago-wrap">
+  <p>Tu pedido queda <strong>pendiente</strong> al confirmar en el carrito. Para pagarlo debes tener <a href="cuenta.html">cuenta e iniciar sesión</a>: el pedido es de quien lo creó.</p>
+  <div class="pago-caja" id="cuentaBox"><p id="cuentaMsg">Verificando tu cuenta…</p></div>
+  <div class="pago-caja">
+    <label>Pedido pendiente
+      <select id="pedidoSel"><option value="">Cargando pedidos…</option></select>
+    </label>
+    <label>ID manual (si vienes del carrito) <input id="pedidoId" type="number" placeholder="Ej: 6"></label>
+    <p>Total del pedido: S/ <strong id="montoTxt">—</strong> <small>(se cobra lo de la BD, no lo que escribas)</small></p>
+    <label>Tarjeta de prueba <input id="tarjeta" value="4242 4242 4242 4242" maxlength="19" inputmode="numeric"></label>
+    <div class="tarj-rapidas">
+      <button type="button" onclick="usarTarjeta('4242 4242 4242 4242')">4242… éxito</button>
+      <button type="button" onclick="usarTarjeta('4000 0000 0000 0002')">0002 rechazada</button>
+      <button type="button" onclick="usarTarjeta('4000 0000 0000 9995')">9995 sin fondos</button>
+    </div>
+    <button type="button" class="btn-add" id="btn" onclick="pagar()">Pagar ahora</button>
+    <p class="carrito-nota">Al pagar aceptas los <a href="terminos-servicio.html" target="_blank" rel="noopener">Términos</a> y la <a href="politica-privacidad.html" target="_blank" rel="noopener">Privacidad</a>. Sandbox: ninguna tarjeta real.</p>
+    <p class="pago-msg" id="msg" aria-live="polite"></p>
+    <p class="carrito-nota">Sandbox propio adaptado de <code>Codigo/Implementado-Sesion-08/pasarela-pago.js</code>: valida Luhn y usa las tarjetas oficiales de Stripe. Nada descuenta dinero real.</p>
+  </div>
+</main>
+<script src="motor-analitica.js"></script>
+<script src="pasarela-pago.js"></script>
+<script>
+function usarTarjeta(n){ document.getElementById("tarjeta").value = n; }
+async function cargarPendientes(){
+  const sel = document.getElementById("pedidoSel");
+  // Puerta de cuenta: sin sesion no se puede pagar
+  try{
+    const c = await fetch("api/cuenta.php"); const cd = await c.json();
+    if(!cd.ok){
+      document.getElementById("cuentaMsg").innerHTML = 'Sin sesión: <a href="cuenta.html?volver=demo-pasarela-pago.html">crea tu cuenta o ingresa</a> para pagar. El botón queda bloqueado.';
+      document.getElementById("btn").disabled = true; sel.innerHTML = '<option value="">(inicia sesión primero)</option>'; return;
+    }
+    document.getElementById("cuentaMsg").innerHTML = 'Pagando como <strong>'+cd.nombre+'</strong> ('+cd.email+'). Solo ves tus pedidos pendientes.';
+  }catch(e){ document.getElementById("cuentaMsg").textContent = "Sin conexión con el servidor."; return; }
+  try{
+    const r = await fetch("api/mis-pedidos.php"); const d = await r.json();
+    const pend = (d.pedidos||[]).filter(function(p){ return p.estado === "pendiente"; });
+    // Autollenado: se elige solo el primer pendiente y se copia ID + total visible
+    function autollenar(id){
+      const p = pend.find(function(x){ return String(x.id) === String(id); });
+      document.getElementById("pedidoId").value = id || "";
+      document.getElementById("montoTxt").textContent = p ? Number(p.total).toFixed(2) : "—";
+    }
+    sel.innerHTML = pend.length
+      ? pend.map(function(p){ return '<option value="'+p.id+'">#'+p.id+' — '+p.cliente_nombre+' — S/ '+Number(p.total).toFixed(2)+'</option>'; }).join("")
+      : '<option value="">(sin pendientes: confirma un pedido en la tienda)</option>';
+    const q = new URLSearchParams(location.search);
+    const qp = q.get("pedido_id") || (pend[0] && pend[0].id);
+    if(qp){ sel.value = qp; autollenar(qp); }
+    else if(pend[0]){ autollenar(pend[0].id); }
+    sel.onchange = function(){ autollenar(sel.value); };
+  }catch(e){ sel.innerHTML = '<option value="">No se pudo cargar (revisa la conexión)</option>'; }
+}
+async function pagar(){
+  const id = Number(document.getElementById("pedidoId").value || document.getElementById("pedidoSel").value);
+  const msg = document.getElementById("msg"), btn = document.getElementById("btn");
+  if(!id){ msg.className="pago-err"; msg.textContent="Elige o escribe el ID del pedido pendiente."; return; }
+  msg.className=""; msg.textContent="Procesando cobro (sandbox ~1.5s)…"; btn.disabled = true;
+  const r = await iniciarPago_baycodec({ pedidoId:id, monto:0, numeroTarjeta:document.getElementById("tarjeta").value });
+  btn.disabled = false;
+  if(r.exito){ msg.className="pago-msg pago-ok"; msg.innerHTML='✓ Pago exitoso '+r.transaccionId+' — pedido #'+id+' pasó a <strong>Pagado</strong> solo. <a href="panel-control.html">Ver en el panel</a>'; cargarPendientes(); }
+  else{ msg.className="pago-msg pago-err"; msg.textContent="✕ "+(r.mensaje||r.motivo); }
+}
+cargarPendientes();
+</script>
+</body>
+</html>

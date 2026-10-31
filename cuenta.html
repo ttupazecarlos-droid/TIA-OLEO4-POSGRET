@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi cuenta — Tía Óleo 4</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/400.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+.cuenta-wrap{max-width:640px;margin:24px auto;padding:0 16px 60px}
+.cuenta-caja{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:18px;margin:14px 0}
+.cuenta-caja input{width:100%;padding:9px;margin:6px 0;border:1px solid #d1d5db;border-radius:6px;font-size:1rem;font-family:inherit}
+.cuenta-msg{min-height:1.4em}.ok{color:#166534;font-weight:700}.err{color:#991b1b;font-weight:700}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Volver a la tienda</a></div>
+<header><div class="header-inner">
+<div class="brand"><span class="brand-icon">✎</span><h1>Tia Óleo 4</h1></div>
+<p class="tagline">Mi cuenta — debes ingresar para pagar tu pedido</p>
+</div></header>
+<main class="cuenta-wrap">
+  <div class="cuenta-caja" id="sesionBox"><p id="sesionMsg">Verificando sesión…</p></div>
+  <div class="cuenta-caja">
+    <h2>Crear cuenta</h2>
+    <input id="rNombre" placeholder="Tu nombre *" maxlength="120">
+    <input id="rEmail" type="email" placeholder="Correo *" maxlength="150">
+    <input id="rTel" placeholder="Celular (opcional)" maxlength="20">
+    <input id="rClave" type="password" placeholder="Clave (mín. 4) *">
+    <label style="display:block;margin:6px 0;font-size:.9rem;"><input type="checkbox" id="rAcepta"> Acepto los <a href="terminos-servicio.html" target="_blank" rel="noopener">Términos</a> y la <a href="politica-privacidad.html" target="_blank" rel="noopener">Privacidad</a> *</label>
+    <button type="button" class="btn-add" onclick="registrar()">Crear cuenta e ingresar</button>
+    <p class="cuenta-msg" id="rMsg"></p>
+  </div>
+  <div class="cuenta-caja">
+    <h2>Ingresar</h2>
+    <input id="lEmail" type="email" placeholder="Correo *">
+    <input id="lClave" type="password" placeholder="Clave *">
+    <button type="button" class="btn-add" onclick="ingresar()">Ingresar</button>
+    <p class="cuenta-msg" id="lMsg"></p>
+  </div>
+</main>
+<script>
+async function estado(){
+  const box = document.getElementById("sesionMsg");
+  try{
+    const r = await fetch("api/cuenta.php"); const d = await r.json();
+    if(d.ok) box.innerHTML = '✓ Hola, <strong>'+d.nombre+'</strong> ('+d.email+'). Ya puedes <a href="demo-pasarela-pago.html">pagar tu pedido</a>. <button type="button" onclick="salir()">Salir</button>';
+    else box.textContent = "Sin sesión: crea tu cuenta o ingresa para poder pagar.";
+  }catch(e){ box.textContent = "Sin conexión con el servidor."; }
+}
+async function registrar(){
+  const m = document.getElementById("rMsg"); m.className="";
+  if(!document.getElementById("rAcepta").checked){ m.className="err"; m.textContent="Acepta los Términos y la Privacidad para crear tu cuenta."; return; }
+  m.textContent="Creando…";
+  const r = await fetch("api/registro-cliente.php",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({nombre:document.getElementById("rNombre").value,email:document.getElementById("rEmail").value,telefono:document.getElementById("rTel").value,password:document.getElementById("rClave").value})});
+  const d = await r.json();
+  if(d.ok){
+    m.className="ok"; m.textContent="✓ Cuenta lista. Hola, "+d.nombre+". Volviendo a la tienda…";
+    try{ localStorage.setItem("tiaoleo_sesion_nombre", d.nombre); }catch(e){}
+    setTimeout(function(){ location.href = "index.html"; }, 900);
+  } else { m.className="err"; m.textContent="✕ "+d.error; }
+}
+async function ingresar(){
+  const m = document.getElementById("lMsg"); m.className=""; m.textContent="Verificando…";
+  const r = await fetch("api/login-cliente.php",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({email:document.getElementById("lEmail").value,password:document.getElementById("lClave").value})});
+  const d = await r.json();
+  if(d.ok){
+    m.className="ok"; m.textContent="✓ Hola, "+d.nombre+". Volviendo a la tienda…";
+    try{ localStorage.setItem("tiaoleo_sesion_nombre", d.nombre); }catch(e){}
+    setTimeout(function(){
+      const vuelve = new URLSearchParams(location.search).get("volver") || "index.html";
+      location.href = vuelve;
+    }, 900);
+  } else { m.className="err"; m.textContent="✕ "+d.error; }
+}
+async function salir(){ await fetch("api/logout.php",{method:"POST"}); estado(); }
+estado();
+</script>
+</body>
+</html>

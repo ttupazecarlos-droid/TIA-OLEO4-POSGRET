@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de Control — Tía Óleo 4</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 0 20px 60px; color: #1f2937; background: #fafafa; line-height: 1.55; }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  .subtitulo_baycodec { color: #6b7280; margin-top: 0; }
+  h2 { font-size: 1.1rem; margin-top: 34px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+  .caja_baycodec { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; margin: 14px 0; }
+  .nota_baycodec { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px 14px; border-radius: 4px; font-size: 0.88rem; margin: 14px 0; }
+  .btn_baycodec { background: #1d4ed8; color: #fff; border: none; padding: 9px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
+  .btn_baycodec:hover { background: #1e40af; }
+  .btn_baycodec.peligro_baycodec { background: #fee2e2; color: #991b1b; }
+  .btn_baycodec.peligro_baycodec:hover { background: #fecaca; }
+  a.btn_baycodec { text-decoration: none; display: inline-block; }
+  .kpis_baycodec { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 16px 0; }
+  .kpi_baycodec { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .kpi_baycodec .valor { font-size: 1.6rem; font-weight: 700; color: #1A1C72; }
+  .kpi_baycodec .etiqueta { font-size: 0.78rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.02em; }
+  .barra-fila_baycodec { display: flex; align-items: center; gap: 10px; margin: 6px 0; font-size: 0.85rem; }
+  .barra-fila_baycodec .nombre { width: 220px; flex-shrink: 0; }
+  .barra-fondo_baycodec { flex: 1; background: #f0f0f0; border-radius: 4px; overflow: hidden; height: 18px; }
+  .barra-relleno_baycodec { background: #C41F25; height: 100%; }
+  .funnel_baycodec { display: flex; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
+  .funnel-paso_baycodec { background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px 18px; text-align: center; flex: 1; min-width: 140px; }
+  .funnel-paso_baycodec .valor { font-size: 1.4rem; font-weight: 700; color: #166534; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.82rem; background: white; }
+  th, td { border: 1px solid #e5e7eb; padding: 6px 8px; text-align: left; }
+  th { background: #f3f4f6; }
+  .estado-pendiente_baycodec { color: #92400e; font-weight: 600; }
+  .estado-pagado_baycodec { color: #166534; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>📊 Panel de Control — Tía Óleo 4</h1>
+<p class="subtitulo_baycodec">Datos reales agregados de <strong>todos</strong> los visitantes del sitio (tabla <code>eventos_analitica</code>, ver <code>obtener-analitica.php</code>) — vinculado a <code>index.html + motor-analitica.js</code> de este proyecto. Herramienta interna: no está enlazada desde el menú del cliente.</p>
+
+<div class="caja_baycodec">
+  <button class="btn_baycodec" onclick="location.reload()">🔄 Refrescar</button>
+  <a class="btn_baycodec" href="index.html" style="background:#C41F25;margin-left:8px;">🌐 Ir al sitio</a>
+  <a class="btn_baycodec" href="admin.html" style="background:#166534;margin-left:8px;">🤖 Panel del Asistente</a>
+  <button class="btn_baycodec peligro_baycodec" onclick="reiniciarDatos_baycodec()" style="margin-left:8px;">🗑️ Reiniciar datos</button>
+</div>
+
+<h2>Indicadores clave</h2>
+<div class="kpis_baycodec">
+  <div class="kpi_baycodec"><div class="valor" id="kpi-visitas_baycodec">0</div><div class="etiqueta">Visitas</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-whatsapp_baycodec">0</div><div class="etiqueta">Clics WhatsApp</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-precios_baycodec">0</div><div class="etiqueta">Consultas de precio</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-busquedas_baycodec">0</div><div class="etiqueta">Búsquedas</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-pedidos_baycodec">0</div><div class="etiqueta">Pedidos generados</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-valor_baycodec">S/ 0.00</div><div class="etiqueta">Valor pedidos</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-chatbot-preguntas_baycodec">0</div><div class="etiqueta">Preguntas al asistente</div></div>
+  <div class="kpi_baycodec"><div class="valor" id="kpi-chatbot-tasa_baycodec">0%</div><div class="etiqueta">Tasa de resolución del asistente</div></div>
+</div>
+
+<h2>Productos con más interés (clics a WhatsApp)</h2>
+<div id="barras-productos_baycodec"></div>
+
+<h2>Embudo de conversión</h2>
+<div class="funnel_baycodec">
+  <div class="funnel-paso_baycodec"><div class="valor" id="funnel-visitas_baycodec">0</div>Visitas</div>
+  <div class="funnel-paso_baycodec"><div class="valor" id="funnel-interes_baycodec">0</div>Mostraron interés<br>(WhatsApp o precios)</div>
+  <div class="funnel-paso_baycodec"><div class="valor" id="funnel-pedidos_baycodec">0</div>Generaron pedido</div>
+  <div class="funnel-paso_baycodec"><div class="valor" id="funnel-tasa_baycodec">0%</div>Tasa de conversión<br>(interés → pedido)</div>
+</div>
+
+<h2>Pedidos y pagos (datos reales de PostgreSQL / Supabase)</h2>
+<p style="font-size:0.85rem;color:#6b7280;margin-top:-8px;">Cuando un pedido pasa de <strong>pendiente</strong> a <strong>Pagado</strong> sin que nadie edite nada manualmente, es porque <code>api/pagar-pedido.php</code> confirmó el cobro (sandbox, con cuenta obligatoria) y actualizó la base PostgreSQL en Supabase — ya no es simulación en <code>localStorage</code>. Gestiona estados en <a href="admin.html">admin.html</a>.</p>
+<table id="tabla-pedidos-pagos_baycodec"><thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Estado pedido</th><th>Estado pago</th><th>Transacción</th></tr></thead><tbody></tbody></table>
+
+<h2>Registro de eventos (últimos 20)</h2>
+<table id="tabla-eventos_baycodec"><thead><tr><th>#</th><th>Tipo</th><th>Detalle</th><th>Página</th><th>Fecha</th></tr></thead><tbody></tbody></table>
+
+<p class="nota_baycodec">Los indicadores y el registro de eventos de esta página se calculan en el servidor
+(<code>obtener-analitica.php</code>) a partir de la tabla real <code>eventos_analitica</code> — agregan lo que hizo
+<strong>cualquier</strong> visitante del sitio, no solo quien abre este panel. <code>motor-analitica.js</code> sigue
+mandando cada evento aquí (además de guardar una copia en el <code>localStorage</code> del propio visitante, que ya
+no se usa en este panel). En un despliegue real esto convive con Google Analytics / Meta Business Suite sin problema.
+La tabla de <strong>Pedidos y pagos</strong> de más arriba lee directamente la base de datos real
+PostgreSQL en Supabase (ver <code>obtener-pedidos.php</code>; <code>totalPedidos/valor</code> también salen de <code>pedidos</code>, y la tasa del asistente de <code>chatbot_consultas</code>).</p>
+
+<script>
+  // Auto-refresco cada 20s para ver en vivo el efecto pago (pendiente -> Pagado)
+  setInterval(function(){ actualizarPanel_baycodec(); }, 20000);
+  async function reiniciarDatos_baycodec() {
+    if (!confirm('¿Borrar todos los eventos registrados (de todos los visitantes)?')) return;
+    const respuesta = await fetch('reiniciar-analitica.php', { method: 'POST' });
+    if (respuesta.status === 401) {
+      alert('Inicia sesión en admin.html para reiniciar la analítica.');
+      return;
+    }
+    actualizarPanel_baycodec();
+  }
+
+  async function actualizarPanel_baycodec() {
+    // Mejora post-Sesión 8: los indicadores ya no se calculan sobre el
+    // localStorage de este navegador (Sesión 5) — vienen agregados de
+    // eventos_analitica en el servidor, via obtener-analitica.php.
+    const cajaKpis = document.querySelector('.kpis_baycodec');
+    let r;
+    try {
+      const respuesta = await fetch('obtener-analitica.php');
+      if (respuesta.status === 401) {
+        cajaKpis.innerHTML = '<p style="color:#9ca3af;">Inicia sesión en el <a href="admin.html">panel de administración</a> para ver la analítica real.</p>';
+        return;
+      }
+      r = await respuesta.json();
+      if (!r.ok) {
+        cajaKpis.innerHTML = `<p style="color:#9ca3af;">${r.mensaje || 'No se pudo cargar la analítica.'}</p>`;
+        return;
+      }
+    } catch (e) {
+      cajaKpis.innerHTML = '<p style="color:#9ca3af;">Error al cargar la analítica.</p>';
+      return;
+    }
+
+    document.getElementById('kpi-visitas_baycodec').textContent = r.totalVisitas;
+    document.getElementById('kpi-whatsapp_baycodec').textContent = r.totalClicsWhatsApp;
+    document.getElementById('kpi-precios_baycodec').textContent = r.clicsPrecios;
+    document.getElementById('kpi-busquedas_baycodec').textContent = r.busquedas;
+    document.getElementById('kpi-pedidos_baycodec').textContent = r.totalPedidos;
+    document.getElementById('kpi-valor_baycodec').textContent = `S/ ${r.valorTotalPedidos.toFixed(2)}`;
+    document.getElementById('kpi-chatbot-preguntas_baycodec').textContent = r.preguntasChatbot;
+    document.getElementById('kpi-chatbot-tasa_baycodec').textContent = `${r.tasaResolucionChatbot.toFixed(0)}%`;
+
+    const maxInteres = Math.max(1, ...Object.values(r.productosConMasInteres));
+    document.getElementById('barras-productos_baycodec').innerHTML = Object.entries(r.productosConMasInteres)
+      .map(([nombre, veces]) => `
+        <div class="barra-fila_baycodec">
+          <span class="nombre">${nombre}</span>
+          <div class="barra-fondo_baycodec"><div class="barra-relleno_baycodec" style="width:${(veces / maxInteres) * 100}%"></div></div>
+          <span>${veces}</span>
+        </div>
+      `).join('') || '<p style="color:#9ca3af;font-size:0.85rem;">(sin clics todavía — navega el sitio y vuelve a refrescar)</p>';
+
+    document.getElementById('funnel-visitas_baycodec').textContent = r.totalVisitas;
+    document.getElementById('funnel-interes_baycodec').textContent = r.totalClicsWhatsApp + r.clicsPrecios;
+    document.getElementById('funnel-pedidos_baycodec').textContent = r.totalPedidos;
+    document.getElementById('funnel-tasa_baycodec').textContent = `${r.tasaConversion.toFixed(1)}%`;
+
+    // Sesión 8: tabla de pedidos y pagos REALES (PostgreSQL / Supabase, via
+    // obtener-pedidos.php), para ver en vivo el efecto del pago
+    // sandbox (Pendiente -> Pagado) sin editar nada manualmente.
+    // Requiere sesión de administrador (mismos datos sensibles que
+    // admin-productos.php).
+    const cuerpoPedidos = document.querySelector('#tabla-pedidos-pagos_baycodec tbody');
+    try {
+      const respuestaPedidos = await fetch('obtener-pedidos.php');
+      const datosPedidos = await respuestaPedidos.json();
+
+      if (respuestaPedidos.status === 401) {
+        cuerpoPedidos.innerHTML = `<tr><td colspan="6" style="color:#9ca3af;">Inicia sesión en el <a href="admin.html">panel de administración</a> para ver los pedidos reales.</td></tr>`;
+      } else if (!datosPedidos.ok) {
+        cuerpoPedidos.innerHTML = `<tr><td colspan="6" style="color:#9ca3af;">${datosPedidos.mensaje || 'No se pudieron cargar los pedidos.'}</td></tr>`;
+      } else {
+        cuerpoPedidos.innerHTML = datosPedidos.pedidos.map(pedido => {
+          const claseEstadoPedido = pedido.estado === 'Pagado' ? 'estado-pagado_baycodec' : 'estado-pendiente_baycodec';
+          const claseEstadoPago = pedido.pago_estado === 'Pagado' ? 'estado-pagado_baycodec' : 'estado-pendiente_baycodec';
+          return `
+            <tr>
+              <td>#${pedido.id}</td>
+              <td>${pedido.cliente_nombre}</td>
+              <td>S/ ${parseFloat(pedido.total).toFixed(2)}</td>
+              <td class="${claseEstadoPedido}">${pedido.estado}</td>
+              <td class="${claseEstadoPago}">${pedido.pago_estado || '—'}</td>
+              <td>${pedido.transaccion_id || '—'}</td>
+            </tr>
+          `;
+        }).join('') || '<tr><td colspan="6" style="color:#9ca3af;">(sin pedidos todavía)</td></tr>';
+      }
+    } catch (e) {
+      cuerpoPedidos.innerHTML = '<tr><td colspan="6" style="color:#9ca3af;">Error al cargar los pedidos.</td></tr>';
+    }
+
+    const cuerpo = document.querySelector('#tabla-eventos_baycodec tbody');
+    cuerpo.innerHTML = r.eventosRecientes.map(e => `
+      <tr>
+        <td>${e.id}</td>
+        <td>${e.tipo}</td>
+        <td>${JSON.stringify(e.detalle)}</td>
+        <td>${e.pagina}</td>
+        <td>${new Date(e.fecha).toLocaleString()}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="5" style="color:#9ca3af;">(vacío — todavía no hay eventos)</td></tr>';
+  }
+
+  actualizarPanel_baycodec();
+</script>
+
+</body>
+</html>

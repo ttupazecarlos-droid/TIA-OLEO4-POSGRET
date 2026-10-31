@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad — Tía Óleo 4</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/400.css">
+<link rel="stylesheet" href="styles.css">
+<style>.legal-wrap{max-width:800px;margin:24px auto;padding:0 16px 60px;line-height:1.65}.legal-wrap h1{font-size:1.5rem}.legal-nota{background:#fffbeb;border-left:4px solid #f59e0b;padding:10px 14px;border-radius:4px;font-size:.9rem;margin:14px 0}.legal-wrap code{background:#f0f0f0;padding:1px 6px;border-radius:4px}</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Volver a la tienda</a></div>
+<header><div class="header-inner">
+<div class="brand"><span class="brand-icon">✎</span><h1>Tia Óleo 4</h1></div>
+<p class="tagline">Política de Privacidad · Actualizada: 02/10/2026</p>
+</div></header>
+<main class="legal-wrap">
+<p class="legal-nota"><strong>Cómo leer este documento:</strong> describe exactamente lo que el código de este proyecto hace hoy con tus datos (cuenta, pedidos, pagos sandbox y analítica), para publicar el sitio de forma honesta en la Sesión 8.</p>
+<h1>Política de Privacidad</h1>
+<h2>1. ¿Quiénes somos?</h2>
+<p>Tía Óleo 4 — Materiales de Arte, Sabandia 418, Characato, Arequipa, Perú. Contacto: <code>tiaoleo4@gmail.com</code> · WhatsApp +51 993 706 366.</p>
+<h2>2. ¿Qué datos recopilamos?</h2>
+<ul>
+<li><strong>Cuenta (si te registras):</strong> nombre, correo, teléfono y dirección. La clave nunca se guarda en texto: se guarda su hash con <code>password_hash</code> (tabla <code>usuarios</code>).</li>
+<li><strong>Pedidos:</strong> lo que escribes en el carrito (nombre, teléfono, dirección) + productos, totales y estado <code>pendiente/pagado</code> (tablas <code>pedidos, pedido_items, pagos</code>).</li>
+<li><strong>Pagos sandbox:</strong> no pedimos ni guardamos tarjetas reales. Solo se guarda el resultado (<code>Pagado/Rechazado</code>, método <code>Tarjeta (sandbox)</code> y código <code>sim_xxx</code>).</li>
+<li><strong>Analítica y chatbot:</strong> visitas, clics a WhatsApp, búsquedas del catálogo y preguntas al asistente (tablas <code>eventos_analitica, chatbot_consultas</code> + copia en <code>localStorage</code> de tu navegador para el carrito y los eventos).</li>
+</ul>
+<h2>3. ¿Dónde se guardan?</h2>
+<p>En la base de datos PostgreSQL de Supabase del servidor donde se publique y en el <code>localStorage</code> de tu navegador (carrito <code>tiaoleo_cart</code>, sesión de eventos). Si borras los datos del navegador, el carrito local desaparece; tus pedidos con cuenta siguen en el servidor.</p>
+<h2>4. Servicios externos</h2>
+<ul>
+<li><strong>open.er-api.com:</strong> solo tasas de cambio públicas para mostrar precios referenciales USD/MXN/BRL. No le enviamos tus datos.</li>
+<li><strong>WhatsApp/Meta:</strong> al pedir o consultar por WhatsApp rige su propia política.</li>
+<li><strong>Google Maps:</strong> el mapa de ubicación carga desde Google con tu IP como cualquier embed.</li>
+<li><strong>jsDelivr (Fontsource):</strong> solo descarga las fuentes; no le enviamos tus datos.</li>
+</ul>
+<h2>5. Tus derechos (Ley N.º 29733)</h2>
+<p>Puedes pedir acceso, rectificación, cancelación u oposición de tus datos escribiendo a <code>tiaoleo4@gmail.com</code> desde tu correo registrado. Sin cuenta, los datos del carrito local los borras tú mismo vaciando el carrito o los datos del navegador.</p>
+<h2>6. Cambios</h2>
+<p>Si se agrega pasarela real, repartos o nuevos servicios, esta política se actualizará antes de activarlos. Ver también los <a href="terminos-servicio.html">Términos de Servicio</a>.</p>
+</main>
+</body>
+</html>

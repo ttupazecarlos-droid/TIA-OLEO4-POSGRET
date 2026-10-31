@@ -1,0 +1,15 @@
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Dependencias / editores
+vendor/
+node_modules/
+.vscode/
+.idea/
+
+# Archivos generados
+*.log
+.DS_Store
+Thumbs.db

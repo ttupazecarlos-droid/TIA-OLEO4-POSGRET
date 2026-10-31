@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tía Óleo 4 | Materiales de Arte en Arequipa: Croqueras, Acuarelas y Pinceles</title>
+  <meta name="description" content="Tía Óleo 4 en Characato, Arequipa: blocs de dibujo, croqueras, acuarelas, pinturas acrílicas, pinceles y lápices. Compra online, pide por WhatsApp 993706366 y cotiza por mayor para aulas y librerías.">
+  <meta name="keywords" content="materiales de arte Arequipa, croquera Arequipa, acuarelas Arequipa, pinturas acrilicas, set pinceles, block dibujo, tienda arte Characato">
+  <meta property="og:title" content="Tía Óleo 4 | Materiales de Arte en Arequipa">
+  <meta property="og:description" content="Tu tienda para crear: papeles, cuadernos, pinturas y pinceles con entrega en Arequipa. Venta al detalle y por mayor.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://tiaoleo4.pe/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <!-- Fuentes: Fraunces (serif) para titulos, IBM Plex Sans para cuerpo de texto -->
+  <!-- Libreria: Fontsource via jsDelivr CDN (no Google Fonts) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/600.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/700.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/800.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/300.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/500.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/600.css">
+  <!-- Hoja de estilos principal del sitio -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========== BARRA SUPERIOR ========== -->
+  <!-- Barra oscura con numero de contacto y direccion de la tienda -->
+  <div class="topbar">
+    <a href="https://wa.me/51993706366" target="_blank" rel="noopener">Cel/WhatsApp: +51 993 706 366</a>
+    <span class="topbar-sep">|</span>
+    <a href="mailto:tiaoleo4@gmail.com">Correo: tiaoleo4@gmail.com</a>
+    <span class="topbar-sep">|</span>
+    <span>Sabandia 418 - Characato - Arequipa</span>
+    <span class="topbar-sep">|</span>
+    <a href="cuenta.html" id="linkCuenta">Mi cuenta</a>
+  </div>
+
+  <!-- ========== ENCABEZADO / LOGOTIPO ========== -->
+  <!-- Muestra el nombre de la tienda y su eslogan -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon">&#9998;</span>
+        <h1>Tia Óleo 4</h1>
+      </div>
+      <p class="tagline">Materiales de Arte</p>
+    </div>
+  </header>
+
+  <!-- ========== BARRA DE NAVEGACION ========== -->
+  <!-- Enlaces a cada categoria de productos + boton de cambio de moneda -->
+  <nav>
+    <div class="nav-scroll">
+      <a href="#inicio">Inicio</a>
+      <a href="#papeles">Papeles</a>
+      <a href="#cuadernos">Cuadernos</a>
+      <a href="#pinturas">Pinturas</a>
+      <a href="#pinceles">Pinceles</a>
+      <a href="#lapices">Lápices</a>
+      <a href="#lienzos">Lienzos</a>
+      <a href="#grafito">Grafito</a>
+      <a href="#accesorios">Accesorios</a>
+    </div>
+    <!-- Boton y menu desplegable para cambiar la moneda de los precios -->
+    <div class="nav-moneda-wrapper">
+      <button class="nav-moneda" id="btnCambiarMoneda" onclick="alternarMenuMonedas()">
+        &#9733; Moneda
+      </button>
+      <div class="menu-monedas" id="menuMonedas"></div>
+    </div>
+    <!-- Boton del carrito con contador -->
+    <button class="nav-carrito" id="btnCarrito" onclick="abrirCarrito()" aria-label="Abrir carrito">
+      &#128722; Carrito <span class="carrito-count" id="carritoCount">0</span>
+    </button>
+    <!-- Boton de sesion para usuarios (exigida para pagar) -->
+    <a class="nav-cuenta" id="btnSesion" href="cuenta.html" aria-label="Mi sesión">&#128100; Sesión</a>
+  </nav>
+
+  <!-- ========== BOTON FLOTANTE "IR AL INICIO" ========== -->
+  <!-- Aparece al hacer scroll hacia abajo, lleva al usuario al tope -->
+  <button class="btn-inicio-flotante" id="btnInicio" onclick="irAlInicio()" aria-label="Ir al inicio"></button>
+
+  <!-- ========== SECCION HERO / CARRUSEL PRINCIPAL ========== -->
+  <!-- Carruel de imagenes con overlay de texto y controles de navegacion -->
+  <section id="inicio">
+    <div class="hero">
+      <!-- Contenedor de las diapositivas del carrusel -->
+      <div class="hero-slides">
+        <div class="hero-slide active">
+          <img src="img/05-pinturas-acrilicas-pasteles.png" alt="Pinturas Acrílicas">
+        </div>
+        <div class="hero-slide">
+          <img loading="lazy" src="img/01-bloc-papel-canvas.jpg" alt="Papeles para Pintar">
+        </div>
+        <div class="hero-slide">
+          <img loading="lazy" src="img/03-set-pinceles-acuarela.jpg" alt="Set de Pinceles">
+        </div>
+        <div class="hero-slide">
+          <img loading="lazy" src="img/17-caja-50-lapices-deluxe.jpg" alt="Lápices de Colores">
+        </div>
+        <div class="hero-slide">
+          <img loading="lazy" src="img/14-croquera-premium.jpg" alt="Cuadernos de Croquera">
+        </div>
+      </div>
+      <!-- Texto superpuesto sobre las imagenes del carrusel -->
+      <div class="hero-overlay">
+        <span class="hero-label">Bienvenidos</span>
+        <h2 class="hero-title">Tia Óleo 4</h2>
+        <p class="hero-desc">Tu tienda especializada en materiales de arte de calidad. Papeles, pinturas, pinceles, cuadernos y todo lo que necesitas para crear.</p>
+      </div>
+      <!-- Botones de flechas y puntos indicadores del carrusel -->
+      <div class="hero-controls">
+        <button class="hero-btn" onclick="previousSlide()" aria-label="Anterior">&larr;</button>
+        <div class="hero-dots">
+          <span class="dot active" onclick="goToSlide(0)"></span>
+          <span class="dot" onclick="goToSlide(1)"></span>
+          <span class="dot" onclick="goToSlide(2)"></span>
+          <span class="dot" onclick="goToSlide(3)"></span>
+          <span class="dot" onclick="goToSlide(4)"></span>
+        </div>
+        <button class="hero-btn" onclick="nextSlide()" aria-label="Siguiente">&rarr;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTENEDOR DEL CATALOGO ========== -->
+  <!-- Se llena dinamicamente con JavaScript (script.js) segun productos-data.js -->
+  <!-- NOTA MODELO (para el informe, no visible como jerga): opera B2C al detalle;
+       el aviso de abajo habilita B2B por volumen sin romper el flujo actual. -->
+  <div class="banda-modelo" id="ventas-mayor">
+    <p class="banda-modelo-texto">¿Necesitas varios sets para tu aula, taller o librería? Te preparamos precio por cantidad con comprobante.</p>
+    <a href="#" class="btn-mayorista" onclick="solicitarCotizacionMayorista(event)">Pedir cotización por mayor</a>
+  </div>
+  <!-- ========== BUSCADOR + FILTRO POR CALIDAD ========== -->
+  <!-- Filtra productos en memoria y pagina resultados (estilo marketplace) -->
+  <div class="buscador-catalogo">
+    <input type="search" id="inputBusqueda" placeholder="Buscar en el catálogo… (ej: acuarela, croquera, pincel)" autocomplete="off" aria-label="Buscar productos">
+    <button type="button" id="btnLimpiarBusqueda" class="btn-limpiar" onclick="limpiarBusqueda()" hidden>✕</button>
+    <div class="filtros-calidad" id="filtrosCalidad" role="group" aria-label="Filtrar por calidad">
+      <span class="filtros-titulo">Calidad:</span>
+      <button type="button" class="filtro-cal activo" data-calidad="0" onclick="filtrarCalidad(0)">Todas</button>
+      <button type="button" class="filtro-cal" data-calidad="1" onclick="filtrarCalidad(1)">Escolar</button>
+      <button type="button" class="filtro-cal" data-calidad="2" onclick="filtrarCalidad(2)">Artística</button>
+      <button type="button" class="filtro-cal" data-calidad="3" onclick="filtrarCalidad(3)">Profesional</button>
+    </div>
+    <p class="buscador-contador" id="contadorResultados" aria-live="polite"></p>
+    <p class="db-estado" id="dbEstado" aria-live="polite"></p>
+  </div>
+  <main class="catalogo" id="catalogo"></main>
+
+  <!-- ========== MODAL FICHA DE PRODUCTO (qué se vende) ========== -->
+  <div class="modal-fondo" id="modalFondo" onclick="cerrarDetalle(event)">
+    <div class="modal-ficha" role="dialog" aria-modal="true" aria-labelledby="fichaNombre">
+      <button type="button" class="modal-cerrar" onclick="cerrarDetalle()" aria-label="Cerrar">✕</button>
+      <img id="fichaImg" src="" alt="" onerror="imgFallback(this)">
+      <div class="ficha-tumbs" id="fichaTumbs"></div>
+      <div class="modal-info">
+        <span class="badge-calidad" id="fichaCalidad"></span>
+        <h3 id="fichaNombre"></h3>
+        <p id="fichaDesc"></p>
+        <p class="ficha-detalle"><strong>¿Qué incluye tu compra?</strong><br><span id="fichaDetalle"></span></p>
+        <p class="ficha-contenido" id="fichaContenido"></p>
+        <p class="ficha-tecnica" id="fichaTecnica"></p>
+        <p class="precio" id="fichaPrecio"></p>
+        <p class="ficha-stock" id="fichaStock"></p>
+        <div class="ficha-resenas" id="fichaResenas"></div>
+        <div class="modal-acciones">
+          <button type="button" class="btn-add" id="fichaAdd">Añadir al carrito</button>
+          <a href="#" class="btn-whatsapp" id="fichaWsp">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== CARRITO LATERAL ========== -->
+  <div class="carrito-fondo" id="carritoFondo" onclick="cerrarCarrito()"></div>
+  <aside class="carrito-panel" id="carritoPanel" aria-label="Carrito de compra">
+    <div class="carrito-head">
+      <h3>Tu carrito</h3>
+      <button type="button" class="modal-cerrar" onclick="cerrarCarrito()" aria-label="Cerrar carrito">✕</button>
+    </div>
+    <div class="carrito-items" id="carritoItems"></div>
+    <div class="carrito-foot">
+      <p class="carrito-total"><span class="carrito-resumen" id="carritoResumen">0 productos</span><span>Total: <strong id="carritoTotal">S/ 0.00</strong></span></p>
+      <div class="cli-grid">
+        <input type="text" id="cliNombre" placeholder="Tu nombre *" maxlength="120">
+        <input type="tel" id="cliTelefono" placeholder="Celular / WhatsApp *" maxlength="20">
+        <input type="text" id="cliDireccion" class="span2" placeholder="Dirección (opcional)" maxlength="255">
+      </div>
+      <div class="carrito-acciones">
+        <button type="button" class="btn-add" onclick="confirmarPedido()">Confirmar pedido</button>
+        <button type="button" class="btn-whatsapp" onclick="pedirPorWhatsApp()">Pedir por WhatsApp</button>
+      </div>
+      <label class="carrito-nota" style="display:block;margin:6px 0;"><input type="checkbox" id="cliAcepta"> Acepto los <a href="terminos-servicio.html" target="_blank" rel="noopener">Términos</a> y la <a href="politica-privacidad.html" target="_blank" rel="noopener">Privacidad</a> *</label>
+      <div class="carrito-sec">
+        <button type="button" class="btn-vaciar" onclick="vaciarCarrito()">Vaciar carrito</button>
+        <p class="carrito-msg" id="carritoMsg" aria-live="polite"></p>
+        <p class="carrito-nota">¿Ya tienes pedido pendiente? <a href="demo-pasarela-pago.html">Pagar con tarjeta (sandbox Sesión 7)</a></p>
+      </div>
+      <p class="carrito-nota">El pedido se guarda con <strong>POST</strong> (datos en el cuerpo, no en la URL).</p>
+    </div>
+  </aside>
+
+  <!-- ========== AVISO FLOTANTE AL AÑADIR ========== -->
+  <div class="toast-carrito" id="toastCarrito" role="status" aria-live="polite" hidden>
+    <span class="toast-check">✓</span>
+    <div class="toast-info"><strong id="toastNombre"></strong><span id="toastDetalle"></span></div>
+    <button type="button" class="toast-ver" onclick="abrirCarrito();ocultarToast()">Ver carrito</button>
+    <button type="button" class="toast-x" onclick="ocultarToast()" aria-label="Cerrar aviso">✕</button>
+  </div>
+
+  <!-- ========== CHATBOT (palabras predeterminadas) ========== -->
+  <button class="chatbot-btn" id="chatbotBtn" onclick="alternarChatbot()" aria-label="Abrir ayuda">?</button>
+  <div class="chatbot-panel" id="chatbotPanel" hidden>
+    <div class="chatbot-head">
+      <strong>Tía Óleo · Ayuda</strong>
+      <button type="button" class="modal-cerrar" onclick="alternarChatbot()" aria-label="Cerrar ayuda">✕</button>
+    </div>
+    <div class="chatbot-msgs" id="chatbotMsgs"></div>
+    <div class="chatbot-quick" id="chatbotQuick"></div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbotText" placeholder="Escribe: precio, calidad, ubicación…" maxlength="200" onkeydown="if(event.key==='Enter')enviarChatbot()">
+      <button type="button" onclick="enviarChatbot()">➤</button>
+    </div>
+  </div>
+
+  <!-- ========== PIE DE PAGINA ========== -->
+  <!-- Informacion de contacto, mapa de ubicacion y derechos de autor -->
+  <footer>
+    <div class="footer-inner">
+      <!-- Columna izquierda: informacion de contacto -->
+      <div class="footer-info">
+        <div class="footer-brand">
+          <span class="footer-icon">&#9998;</span>
+          <span class="footer-name">Tia Óleo 4</span>
+        </div>
+        <p class="footer-contact">Cel/WhatsApp: +51 993 706 366</p>
+        <p class="footer-email"><a href="mailto:tiaoleo4@gmail.com">Correo: tiaoleo4@gmail.com</a></p>
+        <p class="footer-address">Sabandia 418 - Characato - Arequipa</p>
+        <p class="footer-copy">Tu tienda de confianza para todo lo que necesitas crear</p>
+        <div class="footer-line"></div>
+      </div>
+      <!-- Columna derecha: mapa de Google señalando la direccion -->
+      <div class="footer-map">
+        <h3 class="footer-map-title">Ubicación</h3>
+        <iframe
+          class="mapa-embed"
+          src="https://www.google.com/maps?q=-16.4586897,-71.4929844&output=embed"
+          width="100%"
+          height="260"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Mapa de la tienda Tia Oleo 4"></iframe>
+      </div>
+    </div>
+    <p class="footer-copyright">&copy; 2026 Zecarlos Tony Davila Ttupa. Todos los derechos reservados. Creador del c&oacute;digo. · <a class="footer-admin" href="admin.html">Admin</a> · <a class="footer-admin" href="terminos-servicio.html">Términos</a> · <a class="footer-admin" href="politica-privacidad.html">Privacidad</a></p>
+  </footer>
+
+  <!-- ========== ARCHIVOS JAVASCRIPT ========== -->
+  <!-- 1. productos-data.js: Catalogo local (respaldo sin conexion) -->
+  <!-- 2. puente-digital.js: Tasas de cambio (open.er-api.com) -->
+  <!-- 3. script.js: Carrusel, navegacion, WhatsApp, moneda y buscador -->
+  <!-- 4. tienda.js: Catalogo desde PostgreSQL/Supabase, calidades, ficha, carrito y chatbot -->
+  <script src="productos-data.js"></script>
+  <script src="puente-digital.js"></script>
+  <script src="script.js"></script>
+  <script src="tienda.js"></script>
+  <!-- 5. motor-analitica.js: Sesion 5 La Tienda que Observa - vincula con panel-control.html -->
+  <script src="motor-analitica.js"></script>
+  <script>
+  // Sesion: Hola, nombre + autollenado del carrito con los datos de la cuenta
+  function rellenarCarritoConCuenta(d){
+    var n = document.getElementById("cliNombre");
+    var t = document.getElementById("cliTelefono");
+    var dir = document.getElementById("cliDireccion");
+    if(n && !n.value && d.nombre) n.value = d.nombre;
+    if(t && !t.value && d.telefono) t.value = d.telefono;
+    if(dir && !dir.value && d.direccion) dir.value = d.direccion;
+  }
+  fetch("api/cuenta.php").then(function(r){ return r.json(); }).then(function(d){
+    var top = document.getElementById("linkCuenta");
+    var btn = document.getElementById("btnSesion");
+    if(d.ok){
+      if(top) top.textContent = "Hola, " + d.nombre;
+      if(btn) { btn.innerHTML = "&#128100; " + d.nombre; btn.title = "Sesión iniciada: " + d.nombre + " (" + d.email + ")"; }
+      rellenarCarritoConCuenta(d);
+    }
+  }).catch(function(){});
+  // Al abrir el carrito, si hay sesion y los campos estan vacios, se rellenan solos
+  var _abrirCarrito = null;
+  document.addEventListener("DOMContentLoaded", function(){
+    if(typeof abrirCarrito === "function" && !abrirCarrito.__conCuenta){
+      _abrirCarrito = abrirCarrito;
+      abrirCarrito = function(){
+        fetch("api/cuenta.php").then(function(r){ return r.json(); }).then(function(d){
+          if(d.ok) rellenarCarritoConCuenta(d);
+        }).catch(function(){}).finally(function(){ _abrirCarrito(); });
+      };
+      abrirCarrito.__conCuenta = true;
+    }
+  });
+  </script>
+</body>
+</html>

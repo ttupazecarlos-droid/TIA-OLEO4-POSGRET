@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Tía Óleo 4</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fraunces@latest/700.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ibm-plex-sans@latest/600.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="admin-top">
+    <div class="admin-top-inner">
+      <a class="admin-brand" href="index.html">✎ Tía Óleo 4 · Admin</a>
+      <div class="admin-user">
+        <span id="adminUser"></span>
+        <button type="button" id="btnSalir" onclick="salir()" hidden>Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="admin-wrap">
+
+    <!-- ========== INGRESO (solo administrador) ========== -->
+    <section id="loginView" class="admin-card login-card" hidden>
+      <h1>Ingreso del administrador</h1>
+      <p class="admin-ayuda">Zona privada. Usa tu correo y clave de administrador.</p>
+      <label>Correo<input type="email" id="loginEmail" placeholder="admin@tiaoleo.pe" autocomplete="username"></label>
+      <label>Clave<input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')ingresar()"></label>
+      <button type="button" class="abtn primario" onclick="ingresar()">Ingresar</button>
+      <p class="admin-msg" id="loginMsg" aria-live="polite"></p>
+    </section>
+
+    <!-- ========== PANEL ========== -->
+    <div id="panelView" hidden>
+      <div class="admin-stats" id="adminStats"></div>
+
+      <nav class="admin-tabs" aria-label="Secciones">
+        <button type="button" class="atab activo" data-tab="inventario" onclick="verTab('inventario')">📦 Inventario</button>
+        <button type="button" class="atab" data-tab="cotizar" onclick="verTab('cotizar')">🧾 Cotizar</button>
+        <button type="button" class="atab" data-tab="pedidos" onclick="verTab('pedidos')">🛒 Pedidos</button>
+        <button type="button" class="atab" data-tab="historial" onclick="verTab('historial')">📋 Cotizaciones</button>
+      </nav>
+
+      <!-- Inventario: buscar + editar toda la info, stock y precio -->
+      <section id="tab-inventario" class="admin-card">
+        <h2>Inventario</h2>
+        <p class="admin-ayuda">Edita precio y stock al instante, o pulsa <strong>✎ Editar</strong> para cambiar nombre, descripción, categoría, marca y más.</p>
+        <div class="admin-barra">
+          <button type="button" class="abtn primario" onclick="abrirModalNuevo()">＋ Nuevo producto</button>
+        </div>
+        <div class="admin-filtros">
+          <input type="search" id="invBuscar" placeholder="Buscar producto… (nombre)" oninput="cargarInventario()">
+          <select id="invCategoria" onchange="cargarInventario()"><option value="">Todas las categorías</option></select>
+        </div>
+        <div class="tabla-scroll"><table class="admin-tabla">
+          <thead><tr><th>Producto</th><th>Foto</th><th>Categoría</th><th>Spec</th><th>Precio S/</th><th>Stock</th><th>Acciones</th></tr></thead>
+          <tbody id="invBody"></tbody>
+        </table></div>
+        <p class="admin-msg" id="invMsg" aria-live="polite"></p>
+      </section>
+
+      <!-- Cotizar para un cliente -->
+      <section id="tab-cotizar" class="admin-card" hidden>
+        <h2>Nueva cotización</h2>
+        <div class="admin-grid2">
+          <label>Cliente<input type="text" id="cotNombre" placeholder="Nombre del cliente *" maxlength="120" oninput="actualizarBotonWsp()"></label>
+          <label>Celular / WhatsApp<input type="tel" id="cotTelefono" placeholder="Ej: 993706366" maxlength="20" oninput="actualizarBotonWsp()"></label>
+        </div>
+        <p class="admin-ayuda">💡 Tip: escribe el celular del cliente (9 dígitos) y pulsa <strong>Enviar por WhatsApp</strong>. Si lo dejas vacío, WhatsApp te dejará elegir el contacto.</p>
+        <input type="search" id="cotBuscar" placeholder="Agregar producto… (escribe para buscar)" oninput="buscarParaCotizar()">
+        <div class="cot-resultados" id="cotResultados"></div>
+        <h3>Detalle</h3>
+        <div class="tabla-scroll"><table class="admin-tabla">
+          <thead><tr><th>Producto</th><th>Cant.</th><th>P. unit</th><th>Subtotal</th><th></th></tr></thead>
+          <tbody id="cotBody"></tbody>
+        </table></div>
+        <p class="cot-total">Total: <strong id="cotTotal">S/ 0.00</strong></p>
+        <div class="admin-acciones">
+          <button type="button" class="abtn primario" onclick="guardarCotizacion()">Guardar cotización</button>
+          <button type="button" class="abtn wsp" id="btnCotWsp" onclick="enviarCotWsp()" disabled>🟢 Enviar por WhatsApp</button>
+        </div>
+        <p class="admin-msg" id="cotMsg" aria-live="polite"></p>
+      </section>
+
+      <!-- Pedidos de la web -->
+      <section id="tab-pedidos" class="admin-card" hidden>
+        <h2>Pedidos de clientes</h2>
+        <div class="tabla-scroll"><table class="admin-tabla">
+          <thead><tr><th>#</th><th>Cliente</th><th>Detalle</th><th>Total</th><th>Fecha</th><th>Estado</th></tr></thead>
+          <tbody id="pedBody"></tbody>
+        </table></div>
+        <p class="admin-msg" id="pedMsg" aria-live="polite"></p>
+      </section>
+
+      <!-- Cotizaciones guardadas -->
+      <section id="tab-historial" class="admin-card" hidden>
+        <h2>Cotizaciones guardadas</h2>
+        <div class="tabla-scroll"><table class="admin-tabla">
+          <thead><tr><th>#</th><th>Cliente</th><th>Detalle</th><th>Total</th><th>Estado</th><th></th></tr></thead>
+          <tbody id="histBody"></tbody>
+        </table></div>
+        <p class="admin-msg" id="histMsg" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+
+  <!-- ========== NUEVO PRODUCTO (todas las tablas) ========== -->
+  <div class="modal-admin-fondo" id="modalNuevoFondo" onclick="if(event.target.id==='modalNuevoFondo')cerrarModalNuevo()">
+    <div class="modal-admin" role="dialog" aria-modal="true" aria-labelledby="modalNuevoTitulo">
+      <div class="modal-admin-head">
+        <h2 id="modalNuevoTitulo">Nuevo producto</h2>
+        <button type="button" class="modal-cerrar" onclick="cerrarModalNuevo()" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="admin-grid2">
+        <label>Nombre *<input type="text" id="npNombre" maxlength="150" placeholder="Ej: Block Mixto A3"></label>
+        <label>Categoría *<select id="npCategoria"></select></label>
+        <label>Calidad *<select id="npCalidad"></select></label>
+        <label>Marca<select id="npMarca"><option value="">—</option></select></label>
+        <label>Proveedor<select id="npProveedor"><option value="">—</option></select></label>
+        <label>Precio S/ *<input type="number" id="npPrecio" min="0.5" step="0.5" placeholder="25.00"></label>
+        <label>Stock inicial *<input type="number" id="npStock" min="0" step="1" placeholder="10"></label>
+        <label>Gramaje (papel)<select id="npGramaje"><option value="">— No aplica</option></select></label>
+        <label>Dureza (grafito)<select id="npDureza"><option value="">— No aplica</option></select></label>
+        <label>Cerda (pincel)<select id="npCerda"><option value="">— No aplica</option></select></label>
+        <label>Tipo pintura<select id="npTipo"><option value="">— No aplica</option></select></label>
+        <label>Cantidad *<input type="number" id="npCantidad" min="1" value="1"></label>
+        <label>Unidad *<input type="text" id="npUnidad" maxlength="30" placeholder="tubos, hojas, set…"></label>
+        <label>Foto (ruta)<input type="text" id="npImagen" maxlength="255" placeholder="img/mi-foto.jpg (opcional)"></label>
+        <label>o sube una foto<input type="file" id="npFotoFile" accept=".jpg,.jpeg,.png,.webp"></label>
+        <label class="check"><input type="checkbox" id="npDestacado"> Destacado</label>
+      </div>
+      <label>Descripción *<input type="text" id="npDescripcion" maxlength="255" placeholder="Texto corto del producto"></label>
+      <label>¿Qué incluye? (detalle de venta) *<input type="text" id="npDetalle" maxlength="500" placeholder="Se vende: …"></label>
+      <label>Contenido *<input type="text" id="npContenido" maxlength="120" placeholder="12 tubos x 12 ml"></label>
+      <div class="admin-acciones">
+        <button type="button" class="abtn primario" onclick="guardarNuevo()">Guardar producto</button>
+        <button type="button" class="abtn" onclick="cerrarModalNuevo()">Cancelar</button>
+      </div>
+      <p class="admin-msg" id="npMsg" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- ========== EDITAR PRODUCTO (toda la información) ========== -->
+  <div class="modal-admin-fondo" id="modalEditarFondo" onclick="if(event.target.id==='modalEditarFondo')cerrarModalEditar()">
+    <div class="modal-admin" role="dialog" aria-modal="true" aria-labelledby="modalEditarTitulo">
+      <div class="modal-admin-head">
+        <h2 id="modalEditarTitulo">Editar producto</h2>
+        <button type="button" class="modal-cerrar" onclick="cerrarModalEditar()" aria-label="Cerrar">✕</button>
+      </div>
+      <input type="hidden" id="epId">
+      <div class="admin-grid2">
+        <label>Nombre *<input type="text" id="epNombre" maxlength="150"></label>
+        <label>Categoría *<select id="epCategoria"></select></label>
+        <label>Calidad *<select id="epCalidad"></select></label>
+        <label>Marca<select id="epMarca"><option value="">—</option></select></label>
+        <label>Proveedor<select id="epProveedor"><option value="">—</option></select></label>
+        <label>Precio S/ *<input type="number" id="epPrecio" min="0.5" step="0.5"></label>
+        <label>Stock *<input type="number" id="epStock" min="0" max="9999" step="1"></label>
+        <label>Gramaje (papel)<select id="epGramaje"><option value="">— No aplica</option></select></label>
+        <label>Dureza (grafito)<select id="epDureza"><option value="">— No aplica</option></select></label>
+        <label>Cerda (pincel)<select id="epCerda"><option value="">— No aplica</option></select></label>
+        <label>Tipo pintura<select id="epTipo"><option value="">— No aplica</option></select></label>
+        <label>Cantidad *<input type="number" id="epCantidad" min="1"></label>
+        <label>Unidad *<input type="text" id="epUnidad" maxlength="30"></label>
+        <label class="check"><input type="checkbox" id="epDestacado"> Destacado</label>
+        <label class="check"><input type="checkbox" id="epActivo"> Visible en tienda</label>
+      </div>
+      <label>Descripción *<input type="text" id="epDescripcion" maxlength="255"></label>
+      <label>¿Qué incluye? (detalle de venta) *<input type="text" id="epDetalle" maxlength="500"></label>
+      <label>Contenido *<input type="text" id="epContenido" maxlength="120"></label>
+      <div class="admin-acciones">
+        <button type="button" class="abtn primario" onclick="guardarEdicion()">Guardar cambios</button>
+        <button type="button" class="abtn" onclick="cerrarModalEditar()">Cancelar</button>
+      </div>
+      <p class="admin-msg" id="epMsg" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- ========== FOTOS DEL PRODUCTO ========== -->
+  <div class="modal-admin-fondo" id="modalFotoFondo" onclick="if(event.target.id==='modalFotoFondo')cerrarModalFoto()">
+    <div class="modal-admin modal-chico" role="dialog" aria-modal="true" aria-labelledby="modalFotoTitulo">
+      <div class="modal-admin-head">
+        <h2 id="modalFotoTitulo">Fotos</h2>
+        <button type="button" class="modal-cerrar" onclick="cerrarModalFoto()" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="foto-grid" id="fotoGrid"></div>
+      <label>Elegir foto (JPG/PNG/WebP, máx 2 MB)<input type="file" id="fotoFile" accept=".jpg,.jpeg,.png,.webp" onchange="vistaPreviaFoto()"></label>
+      <div class="foto-prev"><img id="fotoPreview" alt="Vista previa" hidden></div>
+      <div class="admin-acciones">
+        <button type="button" class="abtn primario" onclick="subirFoto()">Subir foto</button>
+        <button type="button" class="abtn" onclick="cerrarModalFoto()">Cerrar</button>
+      </div>
+      <p class="admin-msg" id="fotoMsg" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

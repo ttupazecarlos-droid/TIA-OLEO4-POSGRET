@@ -1,0 +1,1461 @@
+
+/* ===========================================================
+   TIA OLEO - ESTILOS PRINCIPALES
+   -----------------------------------------------------------
+   Paleta de colores: tonos oscuros (#1b1b20), crema (#f7f5f0)
+   y terracota (#c8553d). Tipografia: Fraunces + IBM Plex Sans.
+   Libreria de fuentes: Fontsource via jsDelivr CDN.
+   =========================================================== */
+
+/* ====== RESET GLOBAL ====== */
+/* Elimina margenes y padding predeterminados, aplica box-sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ====== VARIABLES CSS (CUSTOM PROPERTIES) ====== */
+/* Definen colores, sombras y transiciones usados en todo el sitio */
+:root {
+  --bg-dark: #1b1b20;          /* Fondo oscuro para header, footer, topbar */
+  --bg-cream: #f7f5f0;         /* Fondo crema del body */
+  --bg-card: #ffffff;          /* Fondo blanco de las tarjetas de producto */
+  --accent: #c8553d;           /* Color terracota (acentos principales) */
+  --accent-light: #e8765f;     /* Terracota claro (hover, etiquetas) */
+  --accent-dark: #a3402d;      /* Terracota oscuro (hover de botones) */
+  --text-dark: #1b1b20;        /* Texto principal oscuro */
+  --text-muted: #6e6b68;       /* Texto secundario/gris */
+  --text-light: #a8a5a0;       /* Texto tenue (valores, notas) */
+  --border: #e8e5e0;           /* Borde sutil para tarjetas y navegacion */
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);        /* Sombra base */
+  --shadow-hover: 0 12px 40px rgba(0,0,0,0.1);  /* Sombra al pasar cursor */
+  --radius: 4px;               /* Radio de borde (poco redondeado) */
+  --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* Transicion suave */
+}
+
+/* ====== ESTILOS DEL BODY ====== */
+/* Fuente base IBM Plex Sans, fondo crema, sin scroll horizontal */
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg-cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===========================================================
+   TOPBAR - Barra superior oscura con numero de contacto
+   =========================================================== */
+.topbar {
+  background: var(--bg-dark);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 8px 20px;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Enlaces en la topbar */
+.topbar a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.topbar a:hover {
+  color: var(--accent-light);
+}
+
+/* Separador entre el contacto y la direccion en la barra superior */
+.topbar-sep {
+  margin: 0 10px;
+  color: var(--accent-light);
+}
+
+/* ===========================================================
+   HEADER - Encabezado con el nombre de la tienda
+   =========================================================== */
+header {
+  background: var(--bg-cream);
+  padding: 40px 20px 30px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Logo: icono + nombre de la tienda en linea */
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.brand-icon {
+  font-size: 1.8rem;
+  color: var(--accent);
+}
+
+/* Nombre de la tienda en fuente serif grande */
+header h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+/* Subtitulo / eslogan debajo del nombre */
+.tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 400;
+}
+
+/* ===========================================================
+   NAVEGACION - Barra de enlaces a categorias de productos
+   Se queda fija (sticky) al hacer scroll
+   =========================================================== */
+nav {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 20px;
+}
+
+/* Contenedor scrollable de los enlaces (oculta scrollbar) */
+.nav-scroll {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-scroll::-webkit-scrollbar { display: none; }
+
+/* Enlaces individuales de navegacion */
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 16px 22px;
+  font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all var(--transition);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+
+/* Hover: color terracota + linea inferior */
+nav a:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* ===========================================================
+   CAMBIO DE MONEDA - Boton y menu desplegable flotante
+   =========================================================== */
+
+/* Wrapper relativo para posicionar el menu absoluto */
+.nav-moneda-wrapper {
+  position: relative;
+  margin-left: 10px;
+}
+
+/* Boton de activar/desactivar el menu de monedas */
+nav .nav-moneda {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+nav .nav-moneda:hover {
+  background: var(--accent-dark);
+}
+
+/* Panel desplegable con la lista de monedas disponibles */
+.menu-monedas {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 280px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--bg-card);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  border: 1px solid var(--border);
+  padding: 8px;
+  z-index: 1000;
+  /* Estado oculto por defecto */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all 0.25s ease;
+}
+
+/* Clase toggle para mostrar el menu */
+.menu-monedas.abierto {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(4px);
+}
+
+/* Titulo dentro del menu de monedas */
+.menu-monedas-titulo {
+  padding: 10px 14px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+/* Mensaje de estado (cargando / error) */
+.menu-monedas-estado {
+  padding: 14px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.menu-monedas-estado.error {
+  color: #c0392b;
+}
+
+/* Cada moneda es un boton clickeable dentro del menu */
+.menu-monedas-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.menu-monedas-item:hover {
+  background: var(--bg-cream);
+}
+
+/* Simbolo de la moneda (ej: S/, $, EUR) */
+.mm-simbolo {
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 36px;
+  font-size: 0.95rem;
+}
+
+/* Nombre del pais */
+.mm-nombre {
+  flex: 1;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+}
+
+/* Valor del tipo de cambio */
+.mm-valor {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===========================================================
+   BOTON FLOTANTE "IR AL INICIO"
+   Aparece al hacer scroll y permite volver al tope de la pagina
+   =========================================================== */
+.btn-inicio-flotante {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 52px;
+  height: 52px;
+  background: var(--bg-dark);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  transition: all var(--transition);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Oculto por defecto, se muestra con clase .visible */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+}
+
+.btn-inicio-flotante.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-inicio-flotante:hover {
+  background: var(--accent);
+  transform: translateY(-3px);
+}
+
+/* Flecha hacia arriba dentro del boton (via contenido CSS) */
+.btn-inicio-flotante::before {
+  content: '\2191';
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* ===========================================================
+   HERO / CARRUSEL PRINCIPAL
+   Muestra imagenes a pantalla completa con efecto fade
+   =========================================================== */
+
+/* Contenedor principal del carrusel */
+.hero {
+  position: relative;
+  width: 100%;
+  height: clamp(350px, 65vh, 650px);
+  overflow: hidden;
+}
+
+/* Contenedor absoluto que apila todas las diapositivas */
+.hero-slides {
+  position: absolute;
+  inset: 0;
+}
+
+/* Cada diapositiva ocupa toda la pantalla y se apila detras de la activa */
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Diapositiva activa: opacity 1 la hace visible */
+.hero-slide.active {
+  opacity: 1;
+}
+
+/* Imagen dentro de cada diapositiva: cubre todo y se oscurece */
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.45) saturate(0.8);
+}
+
+/* Gradiente oscuro en la parte inferior con texto superpuesto */
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: clamp(30px, 6vh, 60px) clamp(20px, 5vw, 80px);
+  background: linear-gradient(to top, rgba(27,27,32,0.95) 0%, rgba(27,27,32,0.6) 60%, transparent 100%);
+  color: white;
+  z-index: 2;
+}
+
+/* Etiqueta "Bienvenidos" encima del titulo */
+.hero-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* Titulo grande del carrusel */
+.hero-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12px;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+/* Descripcion / texto del carrusel */
+.hero-desc {
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  line-height: 1.7;
+  max-width: 600px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+}
+
+/* Controles de navegacion del carrusel (flechas + puntos) */
+.hero-controls {
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 3;
+}
+
+/* Botones de flecha anterior/siguiente */
+.hero-btn {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Contenedor de los indicadores (puntos) */
+.hero-dots {
+  display: flex;
+  gap: 8px;
+}
+
+/* Punto individual del carrusel */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Punto activo: se alarga y cambia a terracota */
+.dot.active {
+  background: var(--accent);
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ===========================================================
+   CATALOGO - Contenedor principal de las secciones de productos
+   =========================================================== */
+.catalogo {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+/* ===========================================================
+   SECCIONES DE CATEGORIAS - Cada categoria es una seccion
+   =========================================================== */
+section {
+  margin-bottom: 70px;
+}
+
+/* Titulo de la categoria (ej: "Papeles y Blocs") */
+section h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+/* Linea decorativa terracota debajo del titulo */
+section .section-line {
+  width: 40px;
+  height: 3px;
+  background: var(--accent);
+  margin-bottom: 35px;
+}
+
+/* ===========================================================
+   GRID DE PRODUCTOS - Cuadricula responsive de tarjetas
+   Se adapta al ancho de pantalla con auto-fill
+   =========================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+/* ===========================================================
+   TARJETAS DE PRODUCTO - Cada tarjeta muestra un producto
+   =========================================================== */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: all var(--transition);
+  position: relative;
+}
+
+/* Hover: eleva la tarjeta y agrega sombra */
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: transparent;
+}
+
+/* Contenedor de imagen dentro de la tarjeta */
+.card .card-carousel {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  background: #f0eeea;
+}
+
+.card .card-carousel-inner {
+  height: 100%;
+}
+
+.card .card-carousel-item {
+  height: 100%;
+}
+
+/* Imagen del producto: se agranda ligeramente al hacer hover */
+.card .card-carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.card:hover .card-carousel-item img {
+  transform: scale(1.08);
+}
+
+/* Zona de informacion: nombre, descripcion, precio y boton */
+.card .info {
+  padding: 22px 20px 26px;
+  text-align: center;
+}
+
+/* Nombre del producto */
+.card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.05rem;
+  color: var(--text-dark);
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+/* Descripcion del producto */
+.card p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+/* Precio en terracota, grande y con fuente serif */
+.card p.precio {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 14px 0 16px;
+  letter-spacing: -0.5px;
+}
+
+/* ===========================================================
+   BOTON DE WHATSAPP - Abre chat con el vendedor
+   =========================================================== */
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-dark);
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all var(--transition);
+  border: none;
+  cursor: pointer;
+}
+
+/* Hover: cambia a verde WhatsApp */
+.btn-whatsapp:hover {
+  background: #25D366;
+  transform: translateY(-2px);
+}
+
+/* Icono SVG de WhatsApp dentro del boton */
+.btn-whatsapp svg {
+  width: 16px;
+  height: 16px;
+  fill: white;
+}
+
+
+
+/* ===========================================================
+   BUSCADOR DEL CATALOGO - Filtra en memoria + paginacion
+   Tira clara con el mismo lenguaje del sitio.
+   =========================================================== */
+.buscador-catalogo {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 22px 24px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  align-items: center;
+}
+
+.buscador-catalogo input[type="search"] {
+  flex: 1 1 280px;
+  max-width: 520px;
+  padding: 12px 16px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  outline: none;
+  transition: border-color var(--transition);
+}
+
+.buscador-catalogo input[type="search"]:focus {
+  border-color: var(--accent);
+}
+
+.btn-limpiar {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all var(--transition);
+}
+
+.btn-limpiar:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.buscador-contador {
+  flex: 1 1 100%;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* Controles de paginacion */
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.pag-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-dark);
+  padding: 9px 16px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.pag-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pag-btn.activo {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.pag-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.busqueda-vacia {
+  text-align: center;
+}
+
+.busqueda-vacia .section-line {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.busqueda-vacia p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ===========================================================
+   AVISO POR MAYOR - Franja sutil entre hero y catalogo
+   Usa los mismos tonos del sitio, sin parecer banner externo.
+   =========================================================== */
+.banda-modelo {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.banda-modelo-texto {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.btn-mayorista {
+  display: inline-block;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 9px 18px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn-mayorista:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* ===========================================================
+   FOOTER - Pie de pagina con informacion de contacto
+   =========================================================== */
+footer {
+  background: var(--bg-dark);
+  color: white;
+  padding: 50px 20px 30px;
+  text-align: center;
+}
+
+/* Contenedor del footer: dos columnas lado a lado */
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+}
+
+/* Columna izquierda: datos de contacto de la tienda */
+.footer-info {
+  flex: 1 1 280px;
+  min-width: 280px;
+}
+
+/* Columna derecha: mapa de ubicacion */
+.footer-map {
+  flex: 1 1 380px;
+  min-width: 300px;
+}
+
+/* Titulo de la seccion del mapa */
+.footer-map-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 14px;
+}
+
+/* Marco del mapa embebido de Google Maps */
+.mapa-embed {
+  display: block;
+  width: 100%;
+  height: 260px;
+  border: 1px solid rgba(255,255,255,0.15);
+  filter: grayscale(1) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+
+/* Al pasar el cursor sobre el mapa se muestra a color */
+.mapa-embed:hover {
+  filter: grayscale(0);
+}
+
+/* Logo + nombre en el footer */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.footer-icon {
+  font-size: 1.5rem;
+  color: var(--accent-light);
+}
+
+.footer-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Numero de contacto en el footer */
+.footer-contact {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Direccion de la tienda en el footer */
+.footer-address {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Correo en el footer */
+.footer-email {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.footer-email a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.footer-email a:hover {
+  color: var(--accent-light);
+}
+
+/* Texto de copyright / eslogan */
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 24px;
+}
+
+/* Linea decorativa terracota bajo la informacion de contacto */
+.footer-line {
+  width: 40px;
+  height: 2px;
+  background: var(--accent);
+  margin-top: 20px;
+}
+
+/* Derechos de autor con el nombre del creador */
+.footer-copyright {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.25);
+  margin-top: 30px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* Acceso discreto al panel del administrador */
+.footer-admin { color: rgba(255,255,255,0.35); text-decoration: none; }
+.footer-admin:hover { color: var(--accent-light); }
+
+/* ===========================================================
+   DISEÑO RESPONSIVE - Ajustes para tabletas y moviles
+   =========================================================== */
+
+/* Tablet: nav no es sticky, reducir paddings */
+@media (max-width: 768px) {
+  nav {
+    position: static;
+    padding: 8px 10px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .nav-scroll {
+    padding: 0;
+  }
+
+  nav a {
+    padding: 14px 14px;
+    font-size: 0.75rem;
+  }
+
+  .catalogo {
+    padding: 40px 16px;
+  }
+
+  /* Grid mas compacto */
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .hero-controls {
+    right: 15px;
+    bottom: 15px;
+  }
+
+  .btn-inicio-flotante {
+    width: 46px;
+    height: 46px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+/* Movil: una sola columna, reducir todo */
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    font-size: 0.65rem;
+    padding: 6px 12px;
+  }
+
+  header {
+    padding: 30px 16px 24px;
+  }
+
+  .hero-overlay {
+    padding: 24px 16px;
+  }
+
+  .hero-controls {
+    right: 10px;
+    bottom: 10px;
+    gap: 8px;
+  }
+
+  .hero-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* Botones del nav mas compactos en movil */
+  .nav-carrito, nav .nav-moneda, .nav-cuenta {
+    min-height: 36px;
+    padding: 8px 14px;
+    font-size: 0.7rem;
+  }
+}
+
+/* ===========================================================
+   TIENDA DB - Carrito, calidades, ficha, chatbot
+   =========================================================== */
+.nav-carrito {
+  background: var(--bg-dark);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+.nav-carrito:hover { background: var(--accent); }
+.carrito-count {
+  display: inline-block;
+  background: var(--accent);
+  min-width: 22px;
+  text-align: center;
+  padding: 1px 6px;
+  margin-left: 6px;
+  font-size: 0.75rem;
+}
+
+.filtros-calidad {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.filtros-titulo { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.filtro-cal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.filtro-cal.activo { background: var(--bg-dark); color: white; border-color: var(--bg-dark); }
+.filtro-cal:hover { border-color: var(--accent); color: var(--accent); }
+.filtro-cal.activo:hover { color: white; }
+.db-estado { flex: 1 1 100%; font-size: 0.78rem; color: var(--text-muted); }
+
+.badge-calidad {
+  display: inline-block;
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+}
+.badge-flot { position: absolute; top: 10px; left: 10px; z-index: 2; }
+.contenido-venta { font-size: 0.72rem !important; letter-spacing: 0.5px; text-transform: uppercase; color: var(--accent) !important; font-weight: 600; }
+
+/* Etiqueta de categoria en resultados de busqueda (respaldo sin tienda.js) */
+.categoria-origen {
+  font-size: 0.7rem !important;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light) !important;
+}
+.stock-linea { font-size: 0.75rem !important; }
+.stock-linea.agotado { color: #c0392b !important; font-weight: 700; }
+.card-acciones { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
+.btn-detalle {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.btn-detalle:hover { border-color: var(--accent); color: var(--accent); }
+.btn-add {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.btn-add:hover:not(:disabled) { background: var(--accent-dark); }
+.btn-add:disabled { opacity: 0.4; cursor: default; }
+.btn-block { width: 100%; margin-top: 8px; padding: 13px; }
+
+/* Modal ficha */
+.modal-fondo {
+  position: fixed; inset: 0;
+  background: rgba(27,27,32,0.6);
+  display: none; align-items: center; justify-content: center;
+  z-index: 2000; padding: 20px;
+}
+.modal-fondo.abierto { display: flex; }
+.modal-ficha {
+  background: white; max-width: 720px; width: 100%;
+  display: flex; flex-wrap: wrap; position: relative;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-ficha img { width: 100%; max-height: 300px; object-fit: cover; }
+.modal-info { padding: 26px; text-align: left; }
+.modal-info h3 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin: 10px 0 8px; }
+.modal-info p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 10px; }
+.ficha-detalle { background: var(--bg-cream); border-left: 3px solid var(--accent); padding: 12px 14px; }
+.ficha-detalle strong { color: var(--text-dark); }
+.ficha-contenido { font-size: 0.75rem !important; text-transform: uppercase; letter-spacing: 1px; color: var(--accent) !important; font-weight: 600; }
+.modal-info .precio { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+.ficha-stock { font-size: 0.8rem !important; font-weight: 600; }
+
+/* Galeria de fotos (tabla producto_imagenes 1:N) */
+.ficha-tumbs { display: none; gap: 8px; padding: 10px 0 0; width: 100%; }
+.ficha-tumbs img { width: 56px; height: 56px; object-fit: cover; cursor: pointer; border: 2px solid transparent; }
+.ficha-tumbs img:hover { border-color: var(--accent); }
+
+/* Opiniones (tabla resenas) */
+.ficha-resenas { margin: 4px 0 6px; }
+.res-titulo { font-size: 0.82rem !important; }
+.res-estrellas { color: #e8a100; letter-spacing: 2px; }
+.res-item { border-top: 1px solid var(--border); padding: 8px 0; }
+.res-item strong { font-size: 0.8rem; margin-right: 8px; }
+.res-item p { margin: 4px 0 0 !important; font-size: 0.82rem !important; }
+.modal-acciones { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.modal-cerrar { position: absolute; top: 10px; right: 10px; background: var(--bg-dark); color: white; border: none; width: 34px; height: 34px; cursor: pointer; z-index: 2; }
+
+/* Carrito en ventana flotante (estilo modal, centrado) */
+.carrito-fondo {
+  position: fixed; inset: 0; background: rgba(27,27,32,0.6);
+  opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 2000;
+}
+.carrito-fondo.visible { opacity: 1; visibility: visible; }
+.carrito-panel {
+  position: fixed; top: 50%; left: 50%;
+  width: min(580px, 94vw); max-height: 90vh;
+  background: white; z-index: 2001; display: flex; flex-direction: column;
+  transform: translate(-50%, -46%) scale(0.96);
+  opacity: 0; visibility: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.25);
+}
+.carrito-panel.abierto {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; visibility: visible;
+}
+.carrito-head { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); position: relative; flex-shrink: 0; }
+.carrito-head h3 { font-family: 'Fraunces', serif; }
+.carrito-head .modal-cerrar { position: static; }
+.carrito-items { flex: 1; min-height: 0; overflow-y: auto; padding: 20px 24px; }
+.carrito-vacio { color: var(--text-muted); font-size: 0.88rem; line-height: 1.8; text-align: center; margin-top: 30px; }
+.carrito-item { display: flex; gap: 14px; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+.carrito-item img { width: 72px; height: 72px; object-fit: cover; flex-shrink: 0; }
+.ci-info { flex: 1; }
+.ci-info strong { display: block; font-size: 0.82rem; }
+.ci-info span { font-size: 0.75rem; color: var(--text-muted); }
+.ci-cant { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.ci-cant button { width: 26px; height: 26px; border: 1px solid var(--border); background: white; cursor: pointer; }
+.ci-cant button:hover { border-color: var(--accent); color: var(--accent); }
+.carrito-foot { padding: 18px 24px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.carrito-total { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 1.05rem; margin-bottom: 12px; }
+.carrito-resumen { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+.carrito-foot input { width: 100%; padding: 10px 12px; margin-bottom: 8px; border: 1px solid var(--border); font-size: 0.85rem; font-family: inherit; }
+.carrito-foot input:focus { border-color: var(--accent); outline: none; }
+
+/* Pie ordenado: datos en grilla, acciones lado a lado */
+.cli-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.cli-grid input { margin-bottom: 0 !important; }
+.cli-grid .span2 { grid-column: 1 / -1; }
+.carrito-acciones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.carrito-sec { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+.carrito-sec .btn-vaciar { margin-top: 0; white-space: nowrap; }
+.carrito-sec .carrito-msg { margin-top: 0; flex: 1; }
+.btn-vaciar { background: none; border: none; color: var(--text-light); font-size: 0.75rem; cursor: pointer; margin-top: 8px; text-decoration: underline; }
+.carrito-nota { font-size: 0.72rem; color: var(--text-light); margin-top: 8px; }
+.carrito-msg { font-size: 0.82rem; margin-top: 8px; color: var(--accent-dark); }
+
+/* Chatbot */
+.chatbot-btn {
+  position: fixed; bottom: 30px; left: 30px; width: 52px; height: 52px;
+  border-radius: 50%; background: var(--accent); color: white;
+  border: none; font-size: 1.5rem; font-weight: 800; cursor: pointer; z-index: 1500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.chatbot-btn:hover { background: var(--accent-dark); }
+.chatbot-panel {
+  position: fixed; bottom: 94px; left: 30px; width: min(340px, 90vw); height: 420px;
+  background: white; border: 1px solid var(--border); z-index: 1500;
+  display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.chatbot-panel[hidden] { display: none; }
+.chatbot-head { background: var(--bg-dark); color: white; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; position: relative; }
+.chatbot-head .modal-cerrar { position: static; background: transparent; }
+.chatbot-msgs { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.chat-msg { max-width: 85%; padding: 9px 12px; font-size: 0.82rem; line-height: 1.5; }
+.chat-msg.bot { background: var(--bg-cream); align-self: flex-start; }
+.chat-msg.yo { background: var(--bg-dark); color: white; align-self: flex-end; }
+.chatbot-quick { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+.chatbot-quick button { font-size: 0.7rem; border: 1px solid var(--border); background: white; padding: 5px 10px; cursor: pointer; }
+.chatbot-quick button:hover { border-color: var(--accent); color: var(--accent); }
+.chatbot-input { display: flex; border-top: 1px solid var(--border); }
+.chatbot-input input { flex: 1; border: none; padding: 12px; font-size: 0.85rem; font-family: inherit; outline: none; }
+.chatbot-input button { background: var(--accent); color: white; border: none; padding: 0 18px; cursor: pointer; font-size: 1rem; }
+
+@media (max-width: 480px) {
+  .chatbot-btn { left: 16px; bottom: 16px; }
+  .chatbot-panel { left: 16px; bottom: 80px; }
+  .nav-carrito, .nav-cuenta { padding: 8px 10px; font-size: 0.7rem; }
+}
+
+/* ===========================================================
+   ANIMACIONES - Efecto de entrada para las tarjetas
+   =========================================================== */
+
+/* Keyframe: las tarjetas suben desde abajo con fade */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cada tarjeta se anima al cargar, con delay escalonado */
+.card {
+  animation: slideUp 0.5s ease-out backwards;
+}
+
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.2s; }
+.card:nth-child(5) { animation-delay: 0.25s; }
+.card:nth-child(6) { animation-delay: 0.3s; }
+
+/* ===========================================================
+   SISTEMA DE BOTONES ARMONICO
+   -----------------------------------------------------------
+   Misma medida, tipografia y forma en todos los botones;
+   solo varia el color segun su accion.
+   =========================================================== */
+.btn-whatsapp,
+.btn-add,
+.btn-detalle,
+.btn-mayorista,
+.pag-btn,
+.filtro-cal,
+nav .nav-moneda,
+.nav-carrito,
+.nav-cuenta {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+/* ----- Solidos ----- */
+.btn-add { background: var(--accent); color: #fff; }
+.btn-add:hover:not(:disabled) { background: var(--accent-dark); transform: translateY(-2px); }
+
+.btn-whatsapp { background: var(--bg-dark); color: #fff; text-decoration: none; }
+.btn-whatsapp:hover { background: #25D366; transform: translateY(-2px); }
+
+nav .nav-moneda { background: var(--accent); color: #fff; }
+nav .nav-moneda:hover { background: var(--accent-dark); }
+
+.nav-carrito { background: var(--bg-dark); color: #fff; margin-left: 10px; }
+.nav-carrito:hover { background: var(--accent); }
+/* Boton de sesion de usuarios (cuenta exigida para pagar) */
+.nav-cuenta {
+  background: transparent; color: #fff; border: 1px solid #fff;
+  padding: 9px 16px; font-family: 'IBM Plex Sans', sans-serif; font-weight: 600;
+  font-size: 0.8rem; letter-spacing: 0.5px; text-transform: uppercase;
+  margin-left: 10px; white-space: nowrap; text-decoration: none;
+  max-width: 180px; overflow: hidden; text-overflow: ellipsis;
+}
+.nav-cuenta:hover { background: #fff; color: var(--bg-dark); }
+
+/* ----- Contorno ----- */
+.btn-detalle { background: transparent; border-color: var(--border); color: var(--text-dark); }
+.btn-detalle:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-mayorista { background: transparent; border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.btn-mayorista:hover { background: var(--accent); color: #fff; }
+
+.pag-btn { background: var(--bg-card); border-color: var(--border); color: var(--text-dark); }
+.pag-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.pag-btn.activo { background: var(--bg-dark); border-color: var(--bg-dark); color: #fff; }
+
+.filtro-cal { background: var(--bg-card); border-color: var(--border); color: var(--text-muted); }
+.filtro-cal:hover { border-color: var(--accent); color: var(--accent); }
+.filtro-cal.activo { background: var(--bg-dark); border-color: var(--bg-dark); color: #fff; }
+.filtro-cal.activo:hover { color: #fff; }
+
+/* ----- Estados ----- */
+.btn-add:disabled,
+.btn-detalle:disabled,
+.pag-btn:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+.btn-whatsapp:focus-visible,
+.btn-add:focus-visible,
+.btn-detalle:focus-visible,
+.btn-mayorista:focus-visible,
+.pag-btn:focus-visible,
+.filtro-cal:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ----- Anchos iguales dentro de tarjetas, modal y carrito ----- */
+.card-acciones .btn-detalle,
+.card-acciones .btn-add { flex: 1 1 0; padding-left: 10px; padding-right: 10px; }
+.card .btn-whatsapp { display: flex; width: 100%; }
+.modal-acciones .btn-add,
+.modal-acciones .btn-whatsapp { flex: 1 1 0; }
+.btn-block { width: 100%; }
+
+/* Boton limpiar a la misma altura del buscador */
+.btn-limpiar { width: 46px; height: 46px; }
+
+/* Marca del producto en la tarjeta */
+.marca-linea {
+  font-size: 0.7rem !important;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-light) !important;
+  font-weight: 600;
+}
+
+/* Clasificacion visible: gramaje, dureza, cerda o tipo de pintura */
+.spec-linea {
+  font-size: 0.72rem !important;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--text-dark) !important;
+  font-weight: 600;
+}
+
+/* Ficha tecnica en el modal */
+.ficha-tecnica {
+  font-size: 0.78rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dark) !important;
+  font-weight: 600;
+  background: var(--bg-cream);
+  padding: 10px 12px;
+}
+
+/* ===========================================================
+   CARRITO FLOTANTE - Toast, progreso, items y movil full
+   =========================================================== */
+
+/* Contador con rebote al añadir */
+@keyframes pop {
+  0% { transform: scale(0.4); }
+  60% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+.carrito-count.pop { animation: pop 0.4s ease; }
+
+/* Aviso flotante al añadir (no interrumpe la compra) */
+.toast-carrito {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background: var(--bg-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  z-index: 3000;
+  max-width: min(460px, 92vw);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.toast-carrito.show { opacity: 1; transform: translate(-50%, 0); }
+.toast-carrito[hidden] { display: none; }
+.toast-check {
+  background: #25D366;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.toast-info { flex: 1; min-width: 0; }
+.toast-info strong { display: block; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toast-info span { font-size: 0.75rem; color: rgba(255,255,255,0.65); }
+.toast-ver {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.toast-ver:hover { background: var(--accent-dark); }
+.toast-x { background: none; border: none; color: rgba(255,255,255,0.55); cursor: pointer; font-size: 0.9rem; padding: 4px; }
+.toast-x:hover { color: #fff; }
+
+/* Items: entrada animada, quitar y tope de stock */
+.carrito-item { animation: slideUp 0.3s ease backwards; }
+.ci-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.ci-side strong { white-space: nowrap; }
+.ci-quitar { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 0.85rem; padding: 2px 4px; }
+.ci-quitar:hover { color: #c0392b; }
+.ci-cant button:disabled { opacity: 0.3; cursor: default; }
+.ci-cant button:disabled:hover { border-color: var(--border); color: inherit; }
+
+/* Movil: el carrito ocupa toda la pantalla */
+@media (max-width: 480px) {
+  .carrito-panel { width: 94vw; max-height: 92vh; }
+  .cli-grid { grid-template-columns: 1fr; }
+  .carrito-acciones { grid-template-columns: 1fr; }
+  .toast-carrito { bottom: 14px; padding: 10px 10px 10px 12px; }
+  .toast-ver { padding: 9px 10px; }
+}
+
+

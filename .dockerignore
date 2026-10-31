@@ -1,0 +1,12 @@
+.git
+.gitignore
+.env
+.env.*
+.vscode
+.idea
+node_modules
+vendor
+*.md
+database.sql
+docker-compose.yml
+render.yaml
