@@ -187,10 +187,10 @@ function solicitarCotizacionMayorista(event) {
 // ===========================================================
 // 5. SISTEMA DE CAMBIO DE MONEDA
 // -----------------------------------------------------------
-// Consulta la API de tipo de cambio (open.er-api.com) y
-// permite al usuario convertir los precios del catalogo a
-// diferentes monedas en tiempo real. Usa el "Puente Digital"
-// definido en puente-digital.js para obtener las tasas.
+// Consulta la API de tipo de cambio (Currency-api, con respaldo en
+// open.er-api.com) y permite al usuario convertir los precios del
+// catalogo a diferentes monedas en tiempo real. Usa el "Puente
+// Digital" definido en puente-digital.js para obtener las tasas.
 // ===========================================================
 
 // Mapa de codigos de moneda con su nombre en espanol y simbolo.

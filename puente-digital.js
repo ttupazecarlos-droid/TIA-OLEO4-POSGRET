@@ -6,50 +6,92 @@
 // obtener las tasas de cambio del dia (Soles -> otras monedas)
 // y devolverlas como un objeto JavaScript.
 //
-// API utilizada: open.er-api.com (Exchange Rate API - Open Access)
-// Documentacion: https://www.exchangerate-api.com/docs/free
+// API principal: Currency-api (fawazahmed0)
+//   https://github.com/fawazahmed0/currency-api
+//   No requiere API Key. Incluye PEN y 150+ monedas.
 //
-// No requiere API Key ni autenticacion. Es gratuita y publica.
+// API de respaldo: open.er-api.com (Exchange Rate API - Open Access)
+//   https://www.exchangerate-api.com/docs/free
+//   Se usa solo si la API principal falla.
+//
 // La funcion obtenerTasasDeCambio() es llamada por script.js
 // cuando el usuario quiere convertir precios a otra moneda.
 // ============================================================
 
-// URL de la API: trae las tasas de cambio usando el Sol (PEN) como base
-const API_TIPO_CAMBIO = "https://open.er-api.com/v6/latest/PEN";
+// API principal: trae las tasas usando el Sol (PEN) como base.
+const API_TIPO_CAMBIO =
+  "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/pen.json";
+
+// API de respaldo: mismo tipo de tasas con base PEN.
+const API_TIPO_CAMBIO_RESPALDO = "https://open.er-api.com/v6/latest/PEN";
 
 /**
- * Obtiene las tasas de cambio actuales desde la API externa.
+ * Normaliza las tasas que devuelve Currency-api.
+ * Esa API usa claves en minusculas: { pen: 1, usd: 0.27, mxn: 4.85, ... }.
+ *
+ * @param {Object} datos Respuesta JSON de Currency-api.
+ * @returns {Object} Tasas con codigos en mayusculas y PEN = 1.
+ */
+function normalizarTasasCurrencyApi(datos) {
+  const tasas = datos && datos.pen;
+  if (!tasas || typeof tasas !== "object") {
+    throw new Error("Currency-api no devolvió tasas válidas.");
+  }
+
+  const normalizadas = {};
+  for (const [codigo, valor] of Object.entries(tasas)) {
+    if (typeof valor === "number" && valor > 0) {
+      normalizadas[codigo.toUpperCase()] = valor;
+    }
+  }
+
+  if (Object.keys(normalizadas).length === 0) {
+    throw new Error("Currency-api devolvió una lista de tasas vacía.");
+  }
+
+  // La base siempre vale 1 sol.
+  normalizadas.PEN = 1;
+  return normalizadas;
+}
+
+/**
+ * Obtiene las tasas de cambio actuales.
  *
  * Flujo:
- * 1. Hace un fetch (peticion HTTP) a la URL de la API
- * 2. Valida que la respuesta sea exitosa (status 200)
- * 3. Parsea el JSON y verifica que el campo "result" sea "success"
- * 4. Devuelve el objeto "rates" con las tasas de cambio
+ * 1. Intenta con Currency-api (principal).
+ * 2. Si falla, intenta con open.er-api.com (respaldo).
+ * 3. Devuelve un objeto { PEN: 1, USD: 0.27, MXN: 4.85, ... }.
  *
- * Ejemplo de lo que devuelve:
- * { USD: 0.27, EUR: 0.25, MXN: 5.42, JPY: 40.12, ... }
- *
- * @returns {Promise<Object>} Objeto con codigos de moneda como claves
- *                            y tasas de cambio como valores numericos
- * @throws {Error} Si la API responde con error o no devuelve tasas validas
+ * @returns {Promise<Object>} Codigos de moneda como claves y tasas como valores.
+ * @throws {Error} Si ambas APIs fallan o no devuelven tasas validas.
  */
 async function obtenerTasasDeCambio() {
-  // Paso 1: Hacer la peticion HTTP a la API
-  const respuesta = await fetch(API_TIPO_CAMBIO);
-
-  // Paso 2: Verificar que la respuesta sea exitosa
-  if (!respuesta.ok) {
-    throw new Error(`La API respondió con error: ${respuesta.status}`);
+  try {
+    const respuesta = await fetch(API_TIPO_CAMBIO);
+    if (!respuesta.ok) {
+      throw new Error(`Currency-api respondió con error: ${respuesta.status}`);
+    }
+    const datos = await respuesta.json();
+    return normalizarTasasCurrencyApi(datos);
+  } catch (errorPrincipal) {
+    // Respaldo: open.er-api.com
+    try {
+      const respuesta = await fetch(API_TIPO_CAMBIO_RESPALDO);
+      if (!respuesta.ok) {
+        throw new Error(`La API de respaldo respondió con error: ${respuesta.status}`);
+      }
+      const datos = await respuesta.json();
+      if (datos.result !== "success" || !datos.rates) {
+        throw new Error("La API de respaldo no devolvió tasas válidas.");
+      }
+      return datos.rates;
+    } catch (errorRespaldo) {
+      throw new Error(
+        "No se pudieron obtener las tasas de cambio: " +
+          errorPrincipal.message +
+          " / " +
+          errorRespaldo.message
+      );
+    }
   }
-
-  // Paso 3: Convertir la respuesta a formato JSON
-  const datos = await respuesta.json();
-
-  // Paso 4: Verificar que la API devolvio datos validos
-  if (datos.result !== "success") {
-    throw new Error("La API no devolvió tasas de cambio válidas.");
-  }
-
-  // Paso 5: Devolver solo el objeto con las tasas
-  return datos.rates;
 }
