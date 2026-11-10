@@ -1,18 +1,18 @@
 /* ===========================================================
    TIA OLEO 4 - TIENDA (DB + calidades + carrito + chatbot)
    -----------------------------------------------------------
-   - Carga el catalogo desde la API PHP/PostgreSQL (GET).
+   - Carga el catalogo desde la API Node.js/PostgreSQL (GET).
      Si la BD no esta disponible, usa productos-data.js + una
      tabla local de calidades/detalle (modo sin conexion).
    - Filtro por tipo de calidad: Escolar / Artistica / Profesional.
    - Ficha "Que incluye tu compra" (especifica lo que se vende).
-   - Carrito en localStorage + guardado con POST (api/pedido.php).
+   - Carrito en localStorage + guardado con POST (api/pedido).
    - Chatbot con palabras predeterminadas (sin IA externa).
    =========================================================== */
 
-const API_PRODUCTOS = 'api/productos.php';
-const API_PEDIDO = 'api/pedido.php';
-const API_CHATBOT = 'api/chatbot.php';
+const API_PRODUCTOS = 'api/productos';
+const API_PEDIDO = 'api/pedido';
+const API_CHATBOT = 'api/chatbot';
 const NUMERO_WHATSAPP = '51993706366';
 
 // Marcas para el modo sin-BD (con BD llegan del API)

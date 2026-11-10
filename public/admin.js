@@ -12,7 +12,7 @@ let ultimaCot = null; // {id, cliente, tel, lineas, total}
 /* ---------- Sesion ---------- */
 async function estadoSesion() {
   try {
-    const r = await fetch('api/sesion.php');
+    const r = await fetch('api/sesion');
     const d = await r.json();
     return d.ok ? d : null;
   } catch (e) { return null; }
@@ -38,7 +38,7 @@ async function ingresar() {
   msg.className = 'admin-msg';
   msg.textContent = 'Verificando…';
   try {
-    const r = await fetch('api/login.php', {
+    const r = await fetch('api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -53,7 +53,7 @@ async function ingresar() {
 }
 
 async function salir() {
-  await fetch('api/logout.php', { method: 'POST' }).catch(() => {});
+  await fetch('api/logout', { method: 'POST' }).catch(() => {});
   location.reload();
 }
 
@@ -70,7 +70,7 @@ async function cargarInventario() {
   const q = document.getElementById('invBuscar').value.trim();
   const cat = document.getElementById('invCategoria').value;
   try {
-    const r = await fetch('api/admin-productos.php?buscar=' + encodeURIComponent(q) + '&categoria=' + encodeURIComponent(cat));
+    const r = await fetch('api/admin-productos?buscar=' + encodeURIComponent(q) + '&categoria=' + encodeURIComponent(cat));
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'Sin acceso.');
     const sel = document.getElementById('invCategoria');
@@ -107,7 +107,7 @@ async function guardarProducto(id) {
   const msg = document.getElementById('invMsg');
   msg.className = 'admin-msg';
   try {
-    const r = await fetch('api/admin-productos.php', {
+    const r = await fetch('api/admin-productos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -135,7 +135,7 @@ async function buscarParaCotizar() {
     const box = document.getElementById('cotResultados');
     if (q.length < 2) { box.innerHTML = ''; return; }
     try {
-      const r = await fetch('api/admin-productos.php?buscar=' + encodeURIComponent(q));
+      const r = await fetch('api/admin-productos?buscar=' + encodeURIComponent(q));
       const d = await r.json();
       if (!d.ok) throw new Error(d.error);
       box.innerHTML = d.productos.slice(0, 8).map(p =>
@@ -195,7 +195,7 @@ async function guardarCotizacion() {
   const msg = document.getElementById('cotMsg');
   msg.className = 'admin-msg';
   try {
-    const r = await fetch('api/admin-cotizaciones.php', {
+    const r = await fetch('api/admin-cotizaciones', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -295,7 +295,7 @@ function enviarCotWsp() {
 async function cargarPedidos() {
   const msg = document.getElementById('pedMsg');
   try {
-    const r = await fetch('api/admin-pedidos.php');
+    const r = await fetch('api/admin-pedidos');
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'Sin acceso.');
     document.getElementById('pedBody').innerHTML = d.pedidos.map(p =>
@@ -316,7 +316,7 @@ async function cargarPedidos() {
 async function cambiarEstadoPedido(id, estado) {
   const msg = document.getElementById('pedMsg');
   try {
-    const r = await fetch('api/admin-pedidos.php', {
+    const r = await fetch('api/admin-pedidos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: id, estado: estado })
@@ -337,7 +337,7 @@ async function cambiarEstadoPedido(id, estado) {
 async function cargarHistorial() {
   const msg = document.getElementById('histMsg');
   try {
-    const r = await fetch('api/admin-cotizaciones.php');
+    const r = await fetch('api/admin-cotizaciones');
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'Sin acceso.');
     document.getElementById('histBody').innerHTML = d.cotizaciones.map(c => {
@@ -358,7 +358,7 @@ async function cargarHistorial() {
 async function cambiarEstadoCot(id, estado) {
   const msg = document.getElementById('histMsg');
   try {
-    const r = await fetch('api/admin-cotizaciones.php', {
+    const r = await fetch('api/admin-cotizaciones', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: id, estado: estado })
@@ -377,7 +377,7 @@ async function cambiarEstadoCot(id, estado) {
 
 async function reenviarCot(id) {
   try {
-    const r = await fetch('api/admin-cotizaciones.php');
+    const r = await fetch('api/admin-cotizaciones');
     const d = await r.json();
     const c = (d.cotizaciones || []).find(x => x.id === id);
     if (!c) return;
@@ -412,7 +412,7 @@ let listasCache = null;
 async function asegurarListas() {
   if (listasCache) return listasCache;
   try {
-    const r = await fetch('api/admin-productos.php');
+    const r = await fetch('api/admin-productos');
     const d = await r.json();
     if (d.ok && d.listas) listasCache = d.listas;
   } catch (e) {}
@@ -452,7 +452,7 @@ async function guardarNuevo() {
   const num = (id) => document.getElementById(id).value;
   msg.textContent = 'Guardando…';
   try {
-    const r = await fetch('api/admin-productos.php', {
+    const r = await fetch('api/admin-productos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -477,7 +477,7 @@ async function guardarNuevo() {
         const fd = new FormData();
         fd.append('producto_id', d.producto_id);
         fd.append('foto', fotoFile);
-        const ru = await fetch('api/admin-imagen.php', { method: 'POST', body: fd });
+        const ru = await fetch('api/admin-imagen', { method: 'POST', body: fd });
         const du = await ru.json();
         if (!du.ok) throw new Error(du.error);
         msg.textContent = '✓ Producto creado con foto. Ya se ve en la tienda.';
@@ -508,7 +508,7 @@ async function abrirModalEditar(id) {
   llenarSel('epCerda', L.cerdas, 'nombre', false);
   llenarSel('epTipo', L.tipos_pintura, 'nombre', false);
   try {
-    const r = await fetch('api/admin-productos.php?id=' + id);
+    const r = await fetch('api/admin-productos?id=' + id);
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'No se pudo cargar.');
     const p = d.producto;
@@ -546,7 +546,7 @@ async function guardarEdicion() {
   const num = (id) => document.getElementById(id).value;
   msg.textContent = 'Guardando…';
   try {
-    const r = await fetch('api/admin-productos.php', {
+    const r = await fetch('api/admin-productos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -595,7 +595,7 @@ function cerrarModalFoto() {
 async function cargarFotos() {
   const box = document.getElementById('fotoGrid');
   try {
-    const r = await fetch('api/admin-imagen.php?producto_id=' + fotoPid);
+    const r = await fetch('api/admin-imagen?producto_id=' + fotoPid);
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'Error.');
     box.innerHTML = d.imagenes.map(f =>
@@ -629,7 +629,7 @@ async function subirFoto() {
     const fd = new FormData();
     fd.append('producto_id', fotoPid);
     fd.append('foto', inp.files[0]);
-    const r = await fetch('api/admin-imagen.php', { method: 'POST', body: fd });
+    const r = await fetch('api/admin-imagen', { method: 'POST', body: fd });
     const d = await r.json();
     if (!d.ok) throw new Error(d.error || 'Error.');
     msg.className = 'admin-msg ok';
@@ -643,7 +643,7 @@ async function subirFoto() {
 async function fotoPrincipal(imgId) {
   const msg = document.getElementById('fotoMsg');
   try {
-    const r = await fetch('api/admin-imagen.php', {
+    const r = await fetch('api/admin-imagen', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ accion: 'principal', imagen_id: imgId })
     });
@@ -657,7 +657,7 @@ async function eliminarFoto(imgId) {
   if (!confirm('¿Eliminar esta foto?')) return;
   const msg = document.getElementById('fotoMsg');
   try {
-    const r = await fetch('api/admin-imagen.php', {
+    const r = await fetch('api/admin-imagen', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ accion: 'eliminar', imagen_id: imgId })
     });

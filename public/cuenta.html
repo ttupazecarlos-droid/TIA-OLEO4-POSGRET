@@ -45,7 +45,7 @@
 async function estado(){
   const box = document.getElementById("sesionMsg");
   try{
-    const r = await fetch("api/cuenta.php"); const d = await r.json();
+    const r = await fetch("api/cuenta"); const d = await r.json();
     if(d.ok) box.innerHTML = '✓ Hola, <strong>'+d.nombre+'</strong> ('+d.email+'). Ya puedes <a href="demo-pasarela-pago.html">pagar tu pedido</a>. <button type="button" onclick="salir()">Salir</button>';
     else box.textContent = "Sin sesión: crea tu cuenta o ingresa para poder pagar.";
   }catch(e){ box.textContent = "Sin conexión con el servidor."; }
@@ -54,7 +54,7 @@ async function registrar(){
   const m = document.getElementById("rMsg"); m.className="";
   if(!document.getElementById("rAcepta").checked){ m.className="err"; m.textContent="Acepta los Términos y la Privacidad para crear tu cuenta."; return; }
   m.textContent="Creando…";
-  const r = await fetch("api/registro-cliente.php",{method:"POST",headers:{"Content-Type":"application/json"},
+  const r = await fetch("api/registro-cliente",{method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({nombre:document.getElementById("rNombre").value,email:document.getElementById("rEmail").value,telefono:document.getElementById("rTel").value,password:document.getElementById("rClave").value})});
   const d = await r.json();
   if(d.ok){
@@ -65,7 +65,7 @@ async function registrar(){
 }
 async function ingresar(){
   const m = document.getElementById("lMsg"); m.className=""; m.textContent="Verificando…";
-  const r = await fetch("api/login-cliente.php",{method:"POST",headers:{"Content-Type":"application/json"},
+  const r = await fetch("api/login-cliente",{method:"POST",headers:{"Content-Type":"application/json"},
     body:JSON.stringify({email:document.getElementById("lEmail").value,password:document.getElementById("lClave").value})});
   const d = await r.json();
   if(d.ok){
@@ -77,7 +77,7 @@ async function ingresar(){
     }, 900);
   } else { m.className="err"; m.textContent="✕ "+d.error; }
 }
-async function salir(){ await fetch("api/logout.php",{method:"POST"}); estado(); }
+async function salir(){ await fetch("api/logout",{method:"POST"}); estado(); }
 estado();
 </script>
 </body>

@@ -1,8 +1,8 @@
 # ============================================================
-# Prueba local: PostgreSQL + PHP/Apache en Docker
+# Prueba local: PostgreSQL + Node.js en Docker
 #   docker compose up --build
-#   App:  http://localhost:8080
-#   Admin: http://localhost:8080/admin.html
+#   App:  http://localhost:3000
+#   Admin: http://localhost:3000/admin.html
 # ============================================================
 services:
   db:
@@ -28,19 +28,24 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - "8080:80"
+      - "3000:3000"
     environment:
       APP_ENV: local
       APP_DEBUG: "1"
+      PORT: "3000"
+      APP_URL: http://localhost:3000
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: tia_oleo4
       DB_USER: postgres
       DB_PASS: postgres
       DB_SSLMODE: disable
-      SESSION_DRIVER: db
       SESSION_NAME: tiaoleo_sess
+      SESSION_SECRET: cambia-este-secreto-en-produccion
       SESSION_SECURE: "0"
+      SESSION_MAX_AGE: "86400"
+    volumes:
+      - ./public/img:/app/public/img
     depends_on:
       db:
         condition: service_healthy

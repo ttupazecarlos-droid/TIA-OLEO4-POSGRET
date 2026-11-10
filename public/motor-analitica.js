@@ -1,6 +1,6 @@
 /* TIA OLEO 4 - LA TIENDA QUE OBSERVA (Sesion 5) - adaptado de Implementado-Sesion-08/motor-analitica.js
    Vincula index.html (rastreo) con panel-control.html (lectura).
-   Guarda en localStorage (tiaoleo-s5-eventos) + servidor (registrar-evento.php -> tabla eventos_analitica).
+   Guarda en localStorage (tiaoleo-s5-eventos) + servidor (api/eventos -> tabla eventos_analitica).
    Mantiene nombres _baycodec para compatibilidad total con panel-control.html original. */
 const ANALITICA_CLAVE_baycodec = "tiaoleo-s5-eventos";
 
@@ -16,7 +16,7 @@ function registrarEvento_baycodec(tipo, detalle) {
     fecha: new Date().toISOString() });
   localStorage.setItem(ANALITICA_CLAVE_baycodec, JSON.stringify(eventos));
   try {
-    fetch("registrar-evento.php", { method: "POST",
+    fetch("api/eventos", { method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ tipo_evento: tipo, datos: detalle,
         pagina: location.pathname.split("/").pop() || "index.html" })

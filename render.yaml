@@ -1,10 +1,11 @@
 services:
   - type: web
     name: tia-oleo4
-    runtime: docker
+    runtime: node
     plan: free
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /api/health.php
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: APP_ENV
         value: production
@@ -22,13 +23,17 @@ services:
         sync: false
       - key: DB_SSLMODE
         value: require
-      - key: SESSION_DRIVER
-        value: db
+      - key: SESSION_NAME
+        value: tiaoleo_sess
+      - key: SESSION_SECRET
+        generateValue: true
       - key: SESSION_SECURE
         value: "1"
+      - key: SESSION_MAX_AGE
+        value: "86400"
       - key: SUPABASE_URL
         sync: false
-      - key: SUPABASE_SERVICE_KEY
+      - key: SUPABASE_SECRET_KEY
         sync: false
       - key: SUPABASE_BUCKET
         value: productos

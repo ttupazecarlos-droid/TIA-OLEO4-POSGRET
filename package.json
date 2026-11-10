@@ -1,0 +1,24 @@
+{
+  "name": "tia-oleo4-posgret",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TIA OLEO 4 - tienda POS con Node.js, Express y PostgreSQL",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:migrate": "node scripts/migrar-mysql-a-postgres.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.3",
+    "pg": "^8.16.3"
+  }
+}

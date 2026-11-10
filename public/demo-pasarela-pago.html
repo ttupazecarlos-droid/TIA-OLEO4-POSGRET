@@ -57,7 +57,7 @@ async function cargarPendientes(){
   const sel = document.getElementById("pedidoSel");
   // Puerta de cuenta: sin sesion no se puede pagar
   try{
-    const c = await fetch("api/cuenta.php"); const cd = await c.json();
+    const c = await fetch("api/cuenta"); const cd = await c.json();
     if(!cd.ok){
       document.getElementById("cuentaMsg").innerHTML = 'Sin sesión: <a href="cuenta.html?volver=demo-pasarela-pago.html">crea tu cuenta o ingresa</a> para pagar. El botón queda bloqueado.';
       document.getElementById("btn").disabled = true; sel.innerHTML = '<option value="">(inicia sesión primero)</option>'; return;
@@ -65,7 +65,7 @@ async function cargarPendientes(){
     document.getElementById("cuentaMsg").innerHTML = 'Pagando como <strong>'+cd.nombre+'</strong> ('+cd.email+'). Solo ves tus pedidos pendientes.';
   }catch(e){ document.getElementById("cuentaMsg").textContent = "Sin conexión con el servidor."; return; }
   try{
-    const r = await fetch("api/mis-pedidos.php"); const d = await r.json();
+    const r = await fetch("api/mis-pedidos"); const d = await r.json();
     const pend = (d.pedidos||[]).filter(function(p){ return p.estado === "pendiente"; });
     // Autollenado: se elige solo el primer pendiente y se copia ID + total visible
     function autollenar(id){

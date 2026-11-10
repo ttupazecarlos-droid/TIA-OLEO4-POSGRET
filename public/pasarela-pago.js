@@ -5,7 +5,7 @@
    Mismo contrato que una pasarela real (Stripe/MercadoPago):
    formulario -> validacion Luhn -> procesamiento -> webhook que
    actualiza el pedido. Diferencia natural del proyecto:
-   el "webhook" vive en api/pagar-pedido.php y actualiza el pedido
+   el "webhook" vive en api/pagar-pedido y actualiza el pedido
    REAL en PostgreSQL (Supabase), no en localStorage.
    Tarjetas de prueba oficiales Stripe:
    4242 4242 4242 4242 exito | 4000 0000 0000 0002 rechazada |
@@ -45,7 +45,7 @@ function iniciarPago_baycodec(datos) {
     }
     // Latencia de red simulada como un cobro real (~1.5s, igual que el original)
     setTimeout(function() {
-      fetch("api/pagar-pedido.php", {
+      fetch("api/pagar-pedido", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pedido_id: pedidoId, numero_tarjeta: numero })
       }).then(function(r) { return r.json(); }).then(function(d) {

@@ -37,7 +37,7 @@
 <body>
 
 <h1>📊 Panel de Control — Tía Óleo 4</h1>
-<p class="subtitulo_baycodec">Datos reales agregados de <strong>todos</strong> los visitantes del sitio (tabla <code>eventos_analitica</code>, ver <code>obtener-analitica.php</code>) — vinculado a <code>index.html + motor-analitica.js</code> de este proyecto. Herramienta interna: no está enlazada desde el menú del cliente.</p>
+<p class="subtitulo_baycodec">Datos reales agregados de <strong>todos</strong> los visitantes del sitio (tabla <code>eventos_analitica</code>, ver <code>api/analitica</code>) — vinculado a <code>index.html + motor-analitica.js</code> de este proyecto. Herramienta interna: no está enlazada desde el menú del cliente.</p>
 
 <div class="caja_baycodec">
   <button class="btn_baycodec" onclick="location.reload()">🔄 Refrescar</button>
@@ -70,26 +70,26 @@
 </div>
 
 <h2>Pedidos y pagos (datos reales de PostgreSQL / Supabase)</h2>
-<p style="font-size:0.85rem;color:#6b7280;margin-top:-8px;">Cuando un pedido pasa de <strong>pendiente</strong> a <strong>Pagado</strong> sin que nadie edite nada manualmente, es porque <code>api/pagar-pedido.php</code> confirmó el cobro (sandbox, con cuenta obligatoria) y actualizó la base PostgreSQL en Supabase — ya no es simulación en <code>localStorage</code>. Gestiona estados en <a href="admin.html">admin.html</a>.</p>
+<p style="font-size:0.85rem;color:#6b7280;margin-top:-8px;">Cuando un pedido pasa de <strong>pendiente</strong> a <strong>Pagado</strong> sin que nadie edite nada manualmente, es porque <code>api/pagar-pedido</code> confirmó el cobro (sandbox, con cuenta obligatoria) y actualizó la base PostgreSQL en Supabase — ya no es simulación en <code>localStorage</code>. Gestiona estados en <a href="admin.html">admin.html</a>.</p>
 <table id="tabla-pedidos-pagos_baycodec"><thead><tr><th>Pedido</th><th>Cliente</th><th>Total</th><th>Estado pedido</th><th>Estado pago</th><th>Transacción</th></tr></thead><tbody></tbody></table>
 
 <h2>Registro de eventos (últimos 20)</h2>
 <table id="tabla-eventos_baycodec"><thead><tr><th>#</th><th>Tipo</th><th>Detalle</th><th>Página</th><th>Fecha</th></tr></thead><tbody></tbody></table>
 
 <p class="nota_baycodec">Los indicadores y el registro de eventos de esta página se calculan en el servidor
-(<code>obtener-analitica.php</code>) a partir de la tabla real <code>eventos_analitica</code> — agregan lo que hizo
+(<code>api/analitica</code>) a partir de la tabla real <code>eventos_analitica</code> — agregan lo que hizo
 <strong>cualquier</strong> visitante del sitio, no solo quien abre este panel. <code>motor-analitica.js</code> sigue
 mandando cada evento aquí (además de guardar una copia en el <code>localStorage</code> del propio visitante, que ya
 no se usa en este panel). En un despliegue real esto convive con Google Analytics / Meta Business Suite sin problema.
 La tabla de <strong>Pedidos y pagos</strong> de más arriba lee directamente la base de datos real
-PostgreSQL en Supabase (ver <code>obtener-pedidos.php</code>; <code>totalPedidos/valor</code> también salen de <code>pedidos</code>, y la tasa del asistente de <code>chatbot_consultas</code>).</p>
+PostgreSQL en Supabase (ver <code>api/pedidos</code>; <code>totalPedidos/valor</code> también salen de <code>pedidos</code>, y la tasa del asistente de <code>chatbot_consultas</code>).</p>
 
 <script>
   // Auto-refresco cada 20s para ver en vivo el efecto pago (pendiente -> Pagado)
   setInterval(function(){ actualizarPanel_baycodec(); }, 20000);
   async function reiniciarDatos_baycodec() {
     if (!confirm('¿Borrar todos los eventos registrados (de todos los visitantes)?')) return;
-    const respuesta = await fetch('reiniciar-analitica.php', { method: 'POST' });
+    const respuesta = await fetch('api/analitica/reiniciar', { method: 'POST' });
     if (respuesta.status === 401) {
       alert('Inicia sesión en admin.html para reiniciar la analítica.');
       return;
@@ -100,11 +100,11 @@ PostgreSQL en Supabase (ver <code>obtener-pedidos.php</code>; <code>totalPedidos
   async function actualizarPanel_baycodec() {
     // Mejora post-Sesión 8: los indicadores ya no se calculan sobre el
     // localStorage de este navegador (Sesión 5) — vienen agregados de
-    // eventos_analitica en el servidor, via obtener-analitica.php.
+    // eventos_analitica en el servidor, via api/analitica.
     const cajaKpis = document.querySelector('.kpis_baycodec');
     let r;
     try {
-      const respuesta = await fetch('obtener-analitica.php');
+      const respuesta = await fetch('api/analitica');
       if (respuesta.status === 401) {
         cajaKpis.innerHTML = '<p style="color:#9ca3af;">Inicia sesión en el <a href="admin.html">panel de administración</a> para ver la analítica real.</p>';
         return;
@@ -144,13 +144,13 @@ PostgreSQL en Supabase (ver <code>obtener-pedidos.php</code>; <code>totalPedidos
     document.getElementById('funnel-tasa_baycodec').textContent = `${r.tasaConversion.toFixed(1)}%`;
 
     // Sesión 8: tabla de pedidos y pagos REALES (PostgreSQL / Supabase, via
-    // obtener-pedidos.php), para ver en vivo el efecto del pago
+    // api/pedidos), para ver en vivo el efecto del pago
     // sandbox (Pendiente -> Pagado) sin editar nada manualmente.
     // Requiere sesión de administrador (mismos datos sensibles que
-    // admin-productos.php).
+    // /api/admin-productos).
     const cuerpoPedidos = document.querySelector('#tabla-pedidos-pagos_baycodec tbody');
     try {
-      const respuestaPedidos = await fetch('obtener-pedidos.php');
+      const respuestaPedidos = await fetch('api/pedidos');
       const datosPedidos = await respuestaPedidos.json();
 
       if (respuestaPedidos.status === 401) {

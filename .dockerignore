@@ -2,10 +2,10 @@
 .gitignore
 .env
 .env.*
+!.env.example
 .vscode
 .idea
 node_modules
-vendor
 *.md
 database.sql
 docker-compose.yml
