@@ -3,6 +3,9 @@
 Tienda y panel de administración migrados a **Node.js + Express** con base de
 datos **PostgreSQL** (local o Supabase). El frontend sigue siendo HTML/CSS/JS.
 
+> **Producción:** <https://tia-oleo4.onrender.com> — aplicación en Render,
+> base de datos y fotos en Supabase.
+
 > **El proyecto activo es 100% Node.js.** Los archivos PHP y los duplicados de
 > la versión anterior fueron eliminados; el servidor solo sirve `public/`.
 
