@@ -14,3 +14,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Metadatos locales de Supabase CLI (no versionar)
+supabase/.temp/
