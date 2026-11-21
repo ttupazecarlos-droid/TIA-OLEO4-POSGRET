@@ -30,6 +30,7 @@
 </ul>
 <h2>3. ¿Dónde se guardan?</h2>
 <p>En la base de datos PostgreSQL de Supabase del servidor donde se publique y en el <code>localStorage</code> de tu navegador (carrito <code>tiaoleo_cart</code>, sesión de eventos). Si borras los datos del navegador, el carrito local desaparece; tus pedidos con cuenta siguen en el servidor.</p>
+<p><strong>Cookie de sesión:</strong> cuando inicias sesión, el servidor usa una cookie técnica llamada <code>tiaoleo_sess</code> para mantener tu cuenta abierta. Es <code>HttpOnly</code>, <code>SameSite=Lax</code> y <code>Secure</code> en producción; no se usa para publicidad ni se comparte con terceros. Se elimina al cerrar sesión o cuando expira.</p>
 <h2>4. Servicios externos</h2>
 <ul>
 <li><strong>Currency-api (fawazahmed0) y open.er-api.com:</strong> solo tasas de cambio públicas para mostrar precios referenciales USD/MXN/BRL. No le enviamos tus datos.</li>
@@ -42,5 +43,9 @@
 <h2>6. Cambios</h2>
 <p>Si se agrega pasarela real, repartos o nuevos servicios, esta política se actualizará antes de activarlos. Ver también los <a href="terminos-servicio.html">Términos de Servicio</a>.</p>
 </main>
+<footer style="max-width:800px;margin:8px auto 0;padding:12px 16px 0;border-top:1px solid #e5e7eb;text-align:center;font-size:.82rem;color:#6b7280;">
+  <a href="terminos-servicio.html" style="color:#1d4ed8;">Términos de Servicio</a> ·
+  <a href="politica-privacidad.html" style="color:#1d4ed8;">Política de Privacidad</a>
+</footer>
 </body>
 </html>

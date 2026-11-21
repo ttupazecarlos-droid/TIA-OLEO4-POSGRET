@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificación de Seguridad Básica — Tía Óleo 4</title>
+<style>
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; max-width: 850px; margin: 0 auto; padding: 0 20px 60px; color: #1f2937; background: #fafafa; line-height: 1.55; }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  h2 { font-size: 1.1rem; margin-top: 34px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+  .subtitulo { color: #6b7280; margin-top: 0; }
+  code { font-family: ui-monospace, Consolas, monospace; background: #f0f0f0; padding: 1px 5px; border-radius: 3px; font-size: .86rem; }
+  .caja { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; margin: 14px 0; }
+  .nota { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 10px 14px; border-radius: 4px; font-size: .9rem; margin: 14px 0; }
+  .fila { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f0f0f0; }
+  .fila:last-child { border-bottom: none; }
+  .icono { font-size: 1.1rem; flex-shrink: 0; width: 22px; text-align: center; }
+  .detalle { font-size: .84rem; color: #6b7280; margin-top: 2px; overflow-wrap: anywhere; }
+  .ok { color: #166534; font-weight: 700; }
+  .warn { color: #92400e; font-weight: 700; }
+  .fail { color: #991b1b; font-weight: 700; }
+  .btn { background: #1d4ed8; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: .85rem; font-weight: 600; }
+  .btn:hover { background: #1e40af; }
+  input[type="text"] { width: 100%; padding: 8px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: .95rem; font-family: inherit; box-sizing: border-box; }
+  .resumen { font-size: .9rem; background: #eef2ff; border: 1px solid #c7d2fe; color: #1e3a8a; border-radius: 6px; padding: 10px 12px; margin: 12px 0; }
+  footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e5e7eb; text-align: center; font-size: .82rem; color: #6b7280; }
+  footer a { color: #1d4ed8; }
+</style>
+</head>
+<body>
+<h1>Verificación de Seguridad Básica</h1>
+<p class="subtitulo">Tía Óleo 4 — Sesión 8 · Cumplimiento normativo y verificación de seguridad</p>
+
+<p>Esta página revisa el sitio publicado desde el mismo origen. No envía datos a servidores externos y no guarda información personal.</p>
+
+<div class="caja">
+  <label for="urlObjetivo" style="font-size:.85rem;font-weight:600;">URL a verificar</label>
+  <input type="text" id="urlObjetivo" placeholder="https://tia-oleo4.onrender.com/">
+  <button class="btn" onclick="verificar()" style="margin-top:10px;">🔍 Verificar</button>
+  <p id="estado" class="detalle" aria-live="polite" style="margin-bottom:0;"></p>
+</div>
+
+<h2>Resultado</h2>
+<div class="caja" id="resultados"><p>Verificando...</p></div>
+
+<div class="nota">
+  <strong>Alcance:</strong> la comprobación de recursos y enlaces se hace sobre el HTML público del sitio.
+  La cookie de sesión es <code>HttpOnly</code>, por eso JavaScript no puede leerla: su configuración se
+  contrasta con la Política de Privacidad y el código del servidor.
+</div>
+
+<footer>
+  <a href="terminos-servicio.html">Términos de Servicio</a> ·
+  <a href="politica-privacidad.html">Política de Privacidad</a>
+</footer>
+
+<script>
+  const PAGINAS = [
+    'index.html',
+    'cuenta.html',
+    'demo-pasarela-pago.html',
+    'admin.html',
+    'panel-control.html',
+    'terminos-servicio.html',
+    'politica-privacidad.html',
+    'verificar-seguridad.html'
+  ];
+
+  function fila(estado, titulo, detalle) {
+    const icono = estado === 'ok' ? '✅' : estado === 'warn' ? '⚠️' : estado === 'fail' ? '❌' : 'ℹ️';
+    const clase = estado === 'ok' ? 'ok' : estado === 'warn' ? 'warn' : estado === 'fail' ? 'fail' : '';
+    return `<div class="fila"><span class="icono">${icono}</span><div><div class="${clase}">${titulo}</div>${detalle ? `<div class="detalle">${detalle}</div>` : ''}</div></div>`;
+  }
+
+  function absoluta(href, base) {
+    try { return new URL(href, base).href; } catch (e) { return href; }
+  }
+
+  async function verificar() {
+    const contenedor = document.getElementById('resultados');
+    const estado = document.getElementById('estado');
+    const input = document.getElementById('urlObjetivo');
+    const objetivo = new URL(input.value.trim() || location.href, location.href);
+    const mismoOrigen = objetivo.origin === location.origin;
+    let html = '';
+    let ok = 0;
+    let avisos = 0;
+    let fallos = 0;
+    contenedor.innerHTML = '<p>Verificando...</p>';
+    estado.textContent = 'Revisando ' + objetivo.href + '…';
+
+    // 1. HTTPS
+    if (objetivo.protocol === 'https:') {
+      html += fila('ok', 'El sitio se sirve por HTTPS.', 'El candado del navegador indica que la conexión viaja cifrada con TLS.');
+      ok++;
+    } else {
+      html += fila('fail', 'El sitio no se sirve por HTTPS.', 'Debe publicarse con un certificado TLS antes de recibir datos reales.');
+      fallos++;
+    }
+
+    let doc = null;
+    try {
+      const respuesta = await fetch(objetivo.href, { cache: 'no-store' });
+      if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
+      doc = new DOMParser().parseFromString(await respuesta.text(), 'text/html');
+    } catch (e) {
+      html += fila('warn', 'No se pudo leer el HTML del sitio desde esta página.', e.message + '. Ejecuta esta verificación desde el mismo dominio o revisa la conexión.');
+      avisos++;
+    }
+
+    // 2. Recursos externos por HTTP
+    if (doc) {
+      const recursos = [...doc.querySelectorAll('script[src], link[href], img[src], iframe[src]')]
+        .map(el => el.getAttribute('src') || el.getAttribute('href'))
+        .filter(Boolean)
+        .map(href => absoluta(href, objetivo.href));
+      const inseguros = recursos.filter(url => url.startsWith('http://'));
+      if (inseguros.length === 0) {
+        html += fila('ok', `Los ${recursos.length} recursos externos detectados usan HTTPS.`, 'Incluye fuentes de jsDelivr, el mapa de Google Maps y los archivos locales del proyecto.');
+        ok++;
+      } else {
+        html += fila('fail', `${inseguros.length} recurso(s) se cargan por HTTP sin cifrar.`, inseguros.slice(0, 5).join('<br>'));
+        fallos++;
+      }
+    }
+
+    // 3. Cookie de sesión declarada
+    try {
+      const politica = await fetch('politica-privacidad.html', { cache: 'no-store' }).then(r => r.text());
+      const declaraCookie = /tiaoleo_sess/i.test(politica) && /cookie/i.test(politica);
+      if (declaraCookie) {
+        html += fila('ok', 'La cookie de sesión está declarada en la Política de Privacidad.', 'Cookie técnica <code>tiaoleo_sess</code>: HttpOnly, SameSite=Lax y Secure en producción. No se usa para publicidad ni se comparte con terceros.');
+        ok++;
+      } else {
+        html += fila('fail', 'El sitio usa una cookie de sesión, pero no está declarada en la Política de Privacidad.', 'Debe informarse su nombre, finalidad y duración.');
+        fallos++;
+      }
+    } catch (e) {
+      html += fila('warn', 'No se pudo comprobar la declaración de cookies.', e.message);
+      avisos++;
+    }
+
+    // 4. Datos de tarjeta en localStorage
+    const claves = Object.keys(localStorage).filter(k => /tiaoleo_cart|tiaoleo_ultimo_pedido/i.test(k));
+    const patronTarjeta = /(?:\d[ -]?){13,19}/;
+    const conTarjeta = claves.filter(k => patronTarjeta.test(localStorage.getItem(k) || ''));
+    if (conTarjeta.length === 0) {
+      html += fila('ok', 'No se guardan números de tarjeta en localStorage.', 'Claves revisadas: ' + (claves.length ? claves.map(k => `<code>${k}</code>`).join(', ') : 'ninguna de carrito/pedido en este navegador') + '.');
+      ok++;
+    } else {
+      html += fila('fail', 'Se detectaron posibles números de tarjeta en localStorage.', conTarjeta.join(', '));
+      fallos++;
+    }
+
+    // 5. Envío del número al backend (observación honesta)
+    html += fila('warn', 'El sandbox envía el número de tarjeta de prueba al backend propio.', 'Se usa solo para validar Luhn y decidir el resultado; no se persiste en la base de datos ni se envía a terceros. El sitio no acepta tarjetas reales. Esta es una simulación educativa.');
+    avisos++;
+
+    // 6. Enlaces legales en todas las páginas
+    if (mismoOrigen) {
+      const faltantes = [];
+      for (const pagina of PAGINAS) {
+        try {
+          const respuesta = await fetch(pagina, { cache: 'no-store' });
+          if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
+          const paginaDoc = new DOMParser().parseFromString(await respuesta.text(), 'text/html');
+          const hrefs = [...paginaDoc.querySelectorAll('a[href]')].map(a => a.getAttribute('href'));
+          const tieneTerminos = hrefs.some(h => /(?:^|\/)terminos-servicio\.html(?:$|[?#])/.test(h));
+          const tienePrivacidad = hrefs.some(h => /(?:^|\/)politica-privacidad\.html(?:$|[?#])/.test(h));
+          if (!tieneTerminos || !tienePrivacidad) faltantes.push(pagina + (!tieneTerminos ? ' (sin Términos)' : '') + (!tienePrivacidad ? ' (sin Privacidad)' : ''));
+        } catch (e) {
+          faltantes.push(pagina + ' (' + e.message + ')');
+        }
+      }
+      if (faltantes.length === 0) {
+        html += fila('ok', 'Los enlaces legales son accesibles desde todas las páginas públicas.', 'Revisadas: ' + PAGINAS.join(', ') + '.');
+        ok++;
+      } else {
+        html += fila('fail', 'Faltan enlaces legales en algunas páginas.', faltantes.join('<br>'));
+        fallos++;
+      }
+    } else {
+      html += fila('warn', 'Los enlaces legales no se pudieron revisar en otro origen.', 'Abre esta página desde el dominio publicado para completar la comprobación.');
+      avisos++;
+    }
+
+    const resumen = `Resultado: ${ok} comprobaciones correctas, ${avisos} observación(es) y ${fallos} fallo(s).`;
+    contenedor.innerHTML = `<div class="resumen">${resumen}</div>${html}`;
+    estado.textContent = 'Verificación completada. ' + resumen;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('urlObjetivo');
+    input.value = location.origin && location.origin !== 'null' ? location.origin + '/' : 'https://tia-oleo4.onrender.com/';
+    verificar();
+  });
+</script>
+</body>
+</html>
