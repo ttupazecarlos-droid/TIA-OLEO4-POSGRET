@@ -74,7 +74,9 @@ router.get(
   asyncHandler(async (req, res) => {
     const usuario = await usuarioActual(req);
     if (!usuario) {
-      res.status(401).json({ ok: false });
+      // Sondeo de sesión del catálogo: responde 200 para no generar
+      // un error 401 en la consola cuando el visitante aún no inició sesión.
+      res.json({ ok: false });
       return;
     }
     res.json({
